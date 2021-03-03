@@ -9,13 +9,42 @@
 
 
     <!-- First Half of Screen - Takes 0.4 percent of screen -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="bottom"
         android:layout_weight="0.5"
         android:orientation="vertical">
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/calculationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
+            android:gravity="end"
+            android:textColor="@color/black"
+            android:textSize="50sp"
+            app:layout_constraintBottom_toTopOf="@+id/resultTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="00000" />
+
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
+            android:visibility="gone"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Result" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Second Half of Screen - Takes the rest 0.6 percent of screen
     This is where buttons are placed -->
@@ -28,15 +57,6 @@
         android:layout_weight="0.5"
         android:orientation="vertical">
 
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonAC"
-            style="@style/RoundCalculatorButtons"
-            android:text="AC"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
-            app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/buttonBackspace"
@@ -66,6 +86,103 @@
             app:layout_constraintStart_toStartOf="@+id/verticalThird"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/buttonMultiplication"
+            style="@style/RoundCalculatorButtons"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_multiply"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
+
+        <ImageButton
+            android:id="@+id/buttonSubtraction"
+            style="@style/RoundCalculatorButtons"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_minus"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
+
+        <ImageButton
+            android:id="@+id/buttonAddition"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_plus"
+
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
+        <ImageButton
+            android:id="@+id/buttonResult"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_equal_mathematical_sign"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalFirst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalSecond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalThird"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalFourth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalFirst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalSecond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalThird"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAC"
+            style="@style/RoundCalculatorButtons"
+            android:text="AC"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
+            app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonZero"
@@ -102,6 +219,7 @@
             app:layout_constraintEnd_toStartOf="@+id/verticalThird"
             app:layout_constraintStart_toEndOf="@+id/verticalSecond"
             app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonFour"
@@ -157,45 +275,6 @@
             app:layout_constraintStart_toStartOf="@+id/verticalSecond"
             app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
 
-        <ImageButton
-            android:id="@+id/buttonMultiplication"
-            style="@style/RoundCalculatorButtons"
-            android:src="@drawable/ic_multiply"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/verticalThird"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
-
-        <ImageButton
-            android:id="@+id/buttonSubtraction"
-            style="@style/RoundCalculatorButtons"
-            android:src="@drawable/ic_minus"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/verticalThird"
-            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
-
-        <ImageButton
-            android:id="@+id/buttonAddition"
-            style="@style/RoundCalculatorButtons"
-            android:src="@drawable/ic_plus"
-
-            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/verticalThird"
-            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
-
-        <ImageButton
-            android:id="@+id/buttonResult"
-            style="@style/RoundCalculatorButtons"
-            android:src="@drawable/ic_equal_mathematical_sign"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/verticalThird"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonDot"
             style="@style/RoundCalculatorNumberButtons"
@@ -206,123 +285,7 @@
             app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
 
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalFirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.2" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalSecond"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.4" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.6" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalFourth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalFirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalSecond"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-        <!--
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/firstRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.20"
-                    android:orientation="horizontal">
-
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonAC"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/round_button"
-                        android:text="AC"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <LinearLayout
-                    android:id="@+id/secondRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.20"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@+id/firstRow"
-                    app:layout_constraintVertical_weight="0.20">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/thirdRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.20"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/fourthRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.20"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/fifthRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.20"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            -->
 
 
 </LinearLayout>
