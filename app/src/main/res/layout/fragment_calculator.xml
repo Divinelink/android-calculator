@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".calculator.CalculatorFragment">
+
+
+    <!-- First Half of Screen - Takes 0.4 percent of screen -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <!-- Second Half of Screen - Takes the rest 0.6 percent of screen
+    This is where buttons are placed -->
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAC"
+            style="@style/RoundCalculatorButtons"
+            android:text="AC"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
+            app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/buttonBackspace"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_backspace"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
+            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+            app:layout_constraintStart_toStartOf="@+id/verticalFirst"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/buttonPercent"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_percentage"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
+            app:layout_constraintEnd_toStartOf="@+id/verticalThird"
+            app:layout_constraintStart_toStartOf="@+id/verticalSecond"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/buttonDivision"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_division"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/verticalThird"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonZero"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+            app:layout_constraintStart_toStartOf="@+id/verticalFirst"
+            app:layout_constraintTop_toTopOf="@+id/horizontalFourth" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonOne"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="1"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
+            app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonTwo"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="2"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
+            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+            app:layout_constraintStart_toStartOf="@+id/verticalFirst"
+            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonThree"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="3"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
+            app:layout_constraintEnd_toStartOf="@+id/verticalThird"
+            app:layout_constraintStart_toEndOf="@+id/verticalSecond"
+            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonFour"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="4"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+            app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonFive"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="5"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+            app:layout_constraintStart_toEndOf="@+id/verticalFirst"
+            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSix"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="6"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+            app:layout_constraintEnd_toStartOf="@+id/verticalThird"
+            app:layout_constraintStart_toEndOf="@+id/verticalSecond"
+            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSeven"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="7"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
+            app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonEight"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="8"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
+            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+            app:layout_constraintStart_toStartOf="@+id/verticalFirst"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonNine"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="9"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
+            app:layout_constraintEnd_toStartOf="@+id/verticalThird"
+            app:layout_constraintStart_toStartOf="@+id/verticalSecond"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
+
+        <ImageButton
+            android:id="@+id/buttonMultiplication"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_multiply"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
+
+        <ImageButton
+            android:id="@+id/buttonSubtraction"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_minus"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
+
+        <ImageButton
+            android:id="@+id/buttonAddition"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_plus"
+
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
+        <ImageButton
+            android:id="@+id/buttonResult"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_equal_mathematical_sign"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonDot"
+            style="@style/RoundCalculatorNumberButtons"
+            android:text="."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/verticalThird"
+            app:layout_constraintStart_toStartOf="@+id/verticalSecond"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalFirst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalSecond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalThird"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalFourth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalFirst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalSecond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalThird"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/firstRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.20"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonAC"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/round_button"
+                        android:text="AC"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/secondRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.20"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/firstRow"
+                    app:layout_constraintVertical_weight="0.20">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/thirdRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.20"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fourthRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.20"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fifthRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.20"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            -->
+
+
+</LinearLayout>
