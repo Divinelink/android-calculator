@@ -5,8 +5,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 import androidx.annotation.RequiresApi;
@@ -15,8 +18,8 @@ import handreolas.divinelink.calculator.features.SharedPrefManager;
 
 public class CalculatorInteractorImpl implements ICalculatorInteractor {
 
-
-    private final SharedPrefManager prefManagerList = new SharedPrefManager();
+    public int NUMBER_LENGTH_FOR_RESULT = 10;
+    public int NUMBER_LENGTH_FOR_CALCULATION = 15;
 
     @RequiresApi(api = Build.VERSION_CODES.N) //FIXME
     @Override
@@ -55,10 +58,10 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                 if (currentNumber.length() <= 15) {
                     calculatorDao.updateCalculator(new CalculatorDomain(calculatorDao.getFirstNumber(), calculatorDao.getSecondNumber(), calculatorDao.getResult(), calculatorDao.getOperator()));
                     listener.onShowResult(
-                            formatNumber(calculatorDao.getFirstNumber()),
-                            formatNumber(calculatorDao.getSecondNumber()),
+                            formatNumber(calculatorDao.getFirstNumber(), NUMBER_LENGTH_FOR_CALCULATION),
+                            formatNumber(calculatorDao.getSecondNumber(), NUMBER_LENGTH_FOR_CALCULATION),
                             calculatorDao.getOperator(),
-                            getScientificNotationOfNumber(calculatorDao.getResult()));
+                            formatNumber(calculatorDao.getResult(), NUMBER_LENGTH_FOR_RESULT));
                 } else { // User is limited to 15 digit number input.
                     listener.onTooManyDigits();
                 }
@@ -86,7 +89,11 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                     secondNumber = calculatorDao.getSecondNumber();
                     operand = calculatorDao.getOperator();
 
-                    listener.onShowResult(formatNumber(firstNumber), formatNumber(secondNumber), operand, getScientificNotationOfNumber(result));
+                    listener.onShowResult(
+                            formatNumber(firstNumber, NUMBER_LENGTH_FOR_CALCULATION),
+                            formatNumber(secondNumber, NUMBER_LENGTH_FOR_CALCULATION),
+                            operand,
+                            formatNumber(result, NUMBER_LENGTH_FOR_RESULT));
                 }
             }
         });
@@ -124,7 +131,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                     calculatorDao.updateSecondNumber(null);
                 }
                 calculatorDao.updateOperation(operand);
-                listener.onSuccess(formatNumber(result), operand);
+                listener.onSuccess(formatNumber(result, NUMBER_LENGTH_FOR_CALCULATION), operand);
 
             }
         });
@@ -135,30 +142,22 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
     private String calculateResult(String firstNumber, String secondNumber, String operand) {
 
         String result;
+        BigDecimal bi1, bi2;
+        bi1 = new BigDecimal(firstNumber);
+        bi2 = new BigDecimal(secondNumber);
 
         switch (operand) {
             case "+":
-                result = String.valueOf(Math.addExact(Long.parseLong(firstNumber), Long.parseLong(secondNumber)));
+                result = String.valueOf(bi1.add(bi2));
                 break;
             case "-":
-                result = String.valueOf(Math.subtractExact(Long.parseLong(firstNumber), Long.parseLong(secondNumber)));
+                result = String.valueOf(bi1.subtract(bi2));
                 break;
             case "×":
-
-                try {
-                    result = String.valueOf(Math.multiplyExact(Long.parseLong(firstNumber), Long.parseLong(secondNumber)));
-                } catch (Exception e) {
-//                    result = b
-                    BigInteger bi1, bi2, bi3;
-                    bi1 = new BigInteger(firstNumber);
-                    bi2 = new BigInteger(secondNumber);
-
-                    bi3 = bi1.multiply(bi2);
-                    result = String.valueOf(Long.parseLong(bi3.toString()));
-                }
+                result = String.valueOf(bi1.multiply(bi2));
                 break;
             case "÷":
-                result = String.valueOf(Math.floorDiv(Long.parseLong(firstNumber), Long.parseLong(secondNumber)));
+                result = String.valueOf(bi1.divide(bi2, 10, RoundingMode.CEILING));
                 break;
             default:
                 result = String.valueOf(firstNumber);
@@ -166,31 +165,21 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
         return result;
     }
 
-    @SuppressLint("DefaultLocale")
-    private String getScientificNotationOfNumber(String number) {
+    private String formatNumber(String number, int roundAfter) {
 
-        if (number != null) {
-            if (Long.parseLong(number) >= 1000000000) {
-                DecimalFormat formatter = new DecimalFormat("0.###E0");
-                return formatter.format(Long.parseLong(number));
-            } else {
-                Locale.setDefault(Locale.US);
-                return String.format("%,d", Long.parseLong(number));
-            }
-        } else {
-            return null;
-        }
-    }
+        // roundAfter - How long do we want number to be in order to show scientific number notation.
 
-    @SuppressLint("DefaultLocale")
-    private String formatNumber(String number) {
+        Locale.setDefault(Locale.US);
         if (number != null) {
-            if (number.length() > 15) {
-                DecimalFormat formatter = new DecimalFormat("0.###E0");
-                return formatter.format(Long.parseLong(number));
+            if (number.length() > roundAfter) {
+
+//                if (number.compareTo(String.valueOf(BigDecimal.ZERO)) > 0){}
+
+                DecimalFormat formatter = new DecimalFormat("0.#######E0");
+                return formatter.format(new BigDecimal(number));
             } else {
-                Locale.setDefault(Locale.US);
-                return String.format("%,d", Long.parseLong(number));
+                DecimalFormat formatter = new DecimalFormat("#,##0");
+                return formatter.format(new BigDecimal(number));
             }
         } else {
             return null;
@@ -205,6 +194,8 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
             return currentNumber + addedNumber;
         }
     }
+
+
 
 
 }
