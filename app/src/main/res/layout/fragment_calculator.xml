@@ -16,27 +16,41 @@
         android:layout_weight="0.5"
         android:orientation="vertical">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalCalculationTVGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
         <TextView
             android:id="@+id/calculationTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginEnd="40dp"
             android:layout_marginStart="40dp"
-            android:gravity="end"
+            android:gravity="center|end"
             android:textColor="@color/black"
             android:textSize="50sp"
+            app:autoSizeMaxTextSize="50sp"
+            app:autoSizeMinTextSize="10sp"
+            app:autoSizeStepGranularity="3sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/resultTextView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/horizontalCalculationTVGuideline"
             tools:text="00000" />
 
         <TextView
             android:id="@+id/resultTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="40dp"
             android:layout_marginStart="40dp"
+            android:gravity="center|end"
             android:visibility="gone"
             android:textSize="35sp"
             app:layout_constraintBottom_toBottomOf="parent"
