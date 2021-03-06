@@ -4,13 +4,16 @@ import android.content.Context;
 
 public interface ICalculatorInteractor {
 
-    void setNumber(OnGetResultFinishListener listener, Context ctx, int number);
+    void setNumber(OnGetResultFinishListener listener, Context ctx, String number);
+
+    void setOperand(OnGetResultFinishListener listener, Context ctx, String operand);
+
+    void setComma(OnGetResultFinishListener listener, Context ctx);
 
     void getResult(OnGetResultFinishListener listener, Context ctx);
 
     void clearEntries(OnGetResultFinishListener listener, Context ctx);
 
-    void setOperand(OnSetOperandFinishListener listener, Context ctx, String operand);
 
 
 
@@ -21,10 +24,6 @@ public interface ICalculatorInteractor {
         void onTooManyDigits();
     }
 
-    interface OnSetOperandFinishListener{
-        void onSuccess(String number, String operand);
-        void onError(String error);
-    }
 
 
 

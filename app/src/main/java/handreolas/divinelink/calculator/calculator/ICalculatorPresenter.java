@@ -4,7 +4,8 @@ import android.content.Context;
 
 interface ICalculatorPresenter {
 
-    void setNumber(Context ctx, int number);
+    void setNumber(Context ctx, String number);
+    void setComma(Context ctx);
     void getNumber(Context ctx);
 
     void clearNumber(Context ctx);

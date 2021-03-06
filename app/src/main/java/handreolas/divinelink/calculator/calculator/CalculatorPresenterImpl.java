@@ -7,10 +7,11 @@ import android.util.Log;
 
 import java.util.Locale;
 
-public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculatorInteractor.OnGetResultFinishListener, ICalculatorInteractor.OnSetOperandFinishListener {
+public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculatorInteractor.OnGetResultFinishListener {
 
     private final ICalculatorView calculatorView;
     private final ICalculatorInteractor interactor;
+    private int mLengthOfResult;
 
     public CalculatorPresenterImpl(ICalculatorView calculatorView) {
         this.calculatorView = calculatorView;
@@ -28,16 +29,18 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
     }
 
     @Override
-    public void setNumber(Context ctx, int number) {
-//        Log.d("Number", Integer.toString(number));
-
+    public void setNumber(Context ctx, String number) {
         interactor.setNumber(this, ctx, number);
-
     }
 
     @Override
     public void setOperand(Context ctx, String operand) {
         interactor.setOperand(this, ctx, operand);
+    }
+
+    @Override
+    public void setComma(Context ctx) {
+        interactor.setComma(this, ctx);
     }
 
     @Override
@@ -53,13 +56,15 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
             calculatorView.showResult(firstNumber);
         } else if (secondNumber == null) {
             calculatorView.showResult(firstNumber + operand);
+        } else {
+            mLengthOfResult = firstNumber.length() + secondNumber.length() + operand.length();
+            if (mLengthOfResult >= 25) {
+                calculatorView.showResult(String.format("%s\n%s%s", firstNumber, operand, secondNumber));
+            } else {
+                calculatorView.showResult(String.format("%s%s%s", firstNumber, operand, secondNumber));
+            }
         }
-        else{
-            calculatorView.showResult(firstNumber + operand + secondNumber);
-        }
-
         calculatorView.showResultOnResultTV(finalResult);
-
     }
 
     @Override
@@ -73,10 +78,12 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
     }
 
 
-    @Override
-    public void onSuccess(String number, String operand) {
-        calculatorView.showResult(number + operand);
-    }
+
+//    @Override
+//    public void onSuccess(String number, String operand) {
+////        mLengthOfResult = number.length() + operand.length();
+//        calculatorView.showResult(number + operand);
+//    }
 
 
     @Override
