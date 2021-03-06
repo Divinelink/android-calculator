@@ -6,14 +6,23 @@
         <!-- Could use android:stateListAnimator="@null" but requires API level 21 or higher -->
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
-        <item name="backgroundTint">@color/white</item>
         <item name="android:background">@drawable/round_button</item>
+        <item name="backgroundTint">@color/white</item>
         <item name="android:textSize">22sp</item>
     </style>
 
     <style name="RoundCalculatorNumberButtons" parent="RoundCalculatorButtons" >
         <!-- Could use android:stateListAnimator="@null" but requires API level 21 or higher -->
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="RoundCalculatorButtons.Operations" parent="RoundCalculatorButtons">
+        <item name="android:textSize">35sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="RoundCalculatorButtons.Percentage" parent="RoundCalculatorButtons.Operations">
+        <item name="android:textSize">22sp</item>
     </style>
 
 

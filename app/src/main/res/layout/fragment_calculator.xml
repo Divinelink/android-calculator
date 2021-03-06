@@ -16,13 +16,6 @@
         android:layout_weight="0.5"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalCalculationTVGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
-
         <TextView
             android:id="@+id/calculationTextView"
             android:layout_width="match_parent"
@@ -33,12 +26,11 @@
             android:textColor="@color/black"
             android:textSize="50sp"
             app:autoSizeMaxTextSize="50sp"
-            app:autoSizeMinTextSize="10sp"
+            app:autoSizeMinTextSize="25sp"
             app:autoSizeStepGranularity="3sp"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/resultTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/horizontalCalculationTVGuideline"
             tools:text="00000" />
@@ -51,11 +43,18 @@
             android:layout_marginEnd="40dp"
             android:layout_marginStart="40dp"
             android:gravity="center|end"
-            android:visibility="gone"
             android:textSize="35sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Result" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalCalculationTVGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -72,6 +71,56 @@
         android:orientation="vertical">
 
 
+        <Button
+            android:id="@+id/buttonDivision"
+            style="@style/RoundCalculatorButtons.Operations"
+            android:text="&#xf7;"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/verticalThird"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonMultiplication"
+            style="@style/RoundCalculatorButtons.Operations"
+            android:scaleType="centerInside"
+            android:text="&#xd7;"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
+
+        <Button
+            android:id="@+id/buttonSubtraction"
+            style="@style/RoundCalculatorButtons.Operations"
+            android:text="&#x2212;"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
+
+        <Button
+            android:id="@+id/buttonAddition"
+            style="@style/RoundCalculatorButtons.Operations"
+            android:text="&#x2b;"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toTopOf="@+id/horizontalThird"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/buttonResult"
+            style="@style/RoundCalculatorButtons.Operations"
+            android:text="&#x3d;"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/verticalThird"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
+
         <ImageButton
             android:id="@+id/buttonBackspace"
             style="@style/RoundCalculatorButtons"
@@ -81,64 +130,15 @@
             app:layout_constraintStart_toStartOf="@+id/verticalFirst"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <Button
             android:id="@+id/buttonPercent"
-            style="@style/RoundCalculatorButtons"
-            android:src="@drawable/ic_percentage"
+            style="@style/RoundCalculatorButtons.Percentage"
+            android:text="&#xFF05;"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
             app:layout_constraintEnd_toStartOf="@+id/verticalThird"
             app:layout_constraintStart_toStartOf="@+id/verticalSecond"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/buttonDivision"
-            style="@style/RoundCalculatorButtons"
-            android:src="@drawable/ic_division"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/verticalThird"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <ImageButton
-            android:id="@+id/buttonMultiplication"
-            style="@style/RoundCalculatorButtons"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_multiply"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/verticalThird"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
-
-        <ImageButton
-            android:id="@+id/buttonSubtraction"
-            style="@style/RoundCalculatorButtons"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_minus"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/verticalThird"
-            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
-
-        <ImageButton
-            android:id="@+id/buttonAddition"
-            style="@style/RoundCalculatorButtons"
-            android:src="@drawable/ic_plus"
-
-            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/verticalThird"
-            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
-
-        <ImageButton
-            android:id="@+id/buttonResult"
-            style="@style/RoundCalculatorButtons"
-            android:src="@drawable/ic_equal_mathematical_sign"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/verticalThird"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horizontalFirst"
@@ -290,7 +290,7 @@
             app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonDot"
+            android:id="@+id/buttonComma"
             style="@style/RoundCalculatorNumberButtons"
             android:text="."
             app:layout_constraintBottom_toBottomOf="parent"

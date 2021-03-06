@@ -24,8 +24,9 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
 
     private ICalculatorPresenter presenter;
 
-    private Button mOne, mTwo, mThree, mFour, mFive, mSix, mSeven, mEight, mNine, mZero, mDelete;
-    private ImageButton mBackspace, mPercentage, mDivision, mMultiplication, mSubtraction, mAddition, mResult;
+    private Button mOne, mTwo, mThree, mFour, mFive, mSix, mSeven, mEight, mNine, mZero, mDelete, mComma;
+    private Button mDivision, mMultiplication, mSubtraction, mAddition, mResult, mPercentage;
+    private ImageButton mBackspace;
 
     private TextView mCalculationTV, mResultTV;
     private Guideline mGuideLineResult;
@@ -87,6 +88,7 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
         mEight = v.findViewById(R.id.buttonEight);
         mNine = v.findViewById(R.id.buttonNine);
         mZero = v.findViewById(R.id.buttonZero);
+        mComma = v.findViewById(R.id.buttonComma);
 
         mDivision = v.findViewById(R.id.buttonDivision);
         mMultiplication = v.findViewById(R.id.buttonMultiplication);
@@ -103,7 +105,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
         mResultTV = v.findViewById(R.id.resultTextView);
 
         mGuideLineResult = v.findViewById(R.id.horizontalCalculationTVGuideline);
-
 
 
 //        GetCalculatorFactory factory = new GetCalculatorFactory();
@@ -123,6 +124,8 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
         mZero.setOnClickListener(this::onClick);
         mDelete.setOnClickListener(this::onClick);
 
+        mComma.setOnClickListener(this::onClick);
+
         mMultiplication.setOnClickListener(this::onClick);
         mDivision.setOnClickListener(this::onClick);
         mAddition.setOnClickListener(this::onClick);
@@ -140,25 +143,25 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
     public void onClick(View v) {
         // TODO Is this efficient?
         if (v.getId() == R.id.buttonOne) {
-            presenter.setNumber(getContext(), 1);
+            presenter.setNumber(getContext(), "1");
         } else if (v.getId() == R.id.buttonTwo) {
-            presenter.setNumber(getContext(), 2);
+            presenter.setNumber(getContext(), "2");
         } else if (v.getId() == R.id.buttonThree) {
-            presenter.setNumber(getContext(), 3);
+            presenter.setNumber(getContext(), "3");
         } else if (v.getId() == R.id.buttonFour) {
-            presenter.setNumber(getContext(), 4);
+            presenter.setNumber(getContext(), "4");
         } else if (v.getId() == R.id.buttonFive) {
-            presenter.setNumber(getContext(), 5);
+            presenter.setNumber(getContext(), "5");
         } else if (v.getId() == R.id.buttonSix) {
-            presenter.setNumber(getContext(), 6);
+            presenter.setNumber(getContext(), "6");
         } else if (v.getId() == R.id.buttonSeven) {
-            presenter.setNumber(getContext(), 7);
+            presenter.setNumber(getContext(), "7");
         } else if (v.getId() == R.id.buttonEight) {
-            presenter.setNumber(getContext(), 8);
+            presenter.setNumber(getContext(), "8");
         } else if (v.getId() == R.id.buttonNine) {
-            presenter.setNumber(getContext(), 9);
+            presenter.setNumber(getContext(), "9");
         } else if (v.getId() == R.id.buttonZero) {
-            presenter.setNumber(getContext(), 0);
+            presenter.setNumber(getContext(), "0");
         } else if (v.getId() == R.id.buttonAC) {
             presenter.clearNumber(getContext());
         } else if (v.getId() == R.id.buttonAddition) {
@@ -169,6 +172,8 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
             presenter.setOperand(getContext(), "×");
         } else if (v.getId() == R.id.buttonDivision) {
             presenter.setOperand(getContext(), "÷");
+        } else if (v.getId() == R.id.buttonComma) {
+            presenter.setComma(getContext());
         }
 
     }
@@ -176,8 +181,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
 
     @Override
     public void showResult(String result) {
-
-
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -186,8 +189,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                 }
             });
         }
-
-
     }
 
     @Override
@@ -207,15 +208,10 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                 }
             });
         }
-
-
     }
-
 
     @Override
     public void onClearTextViews() {
-
-
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -230,7 +226,5 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                 }
             });
         }
-
-
     }
 }
