@@ -52,13 +52,17 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
     @Override
     public void onShowResult(String firstNumber, String secondNumber, String operand, String finalResult) {
 
+        int lengthLimitOnCalculation = 25;
+
         if (operand == null) {
             calculatorView.showResult(firstNumber);
         } else if (secondNumber == null) {
             calculatorView.showResult(firstNumber + operand);
         } else {
             mLengthOfResult = firstNumber.length() + secondNumber.length() + operand.length();
-            if (mLengthOfResult >= 25) {
+            if (firstNumber.contains("E")) // If First Number is in exponential form, then @lengthLimitOnCaluclation becomes 23, so UI doesn't break.
+                lengthLimitOnCalculation = 23;
+            if (mLengthOfResult >= lengthLimitOnCalculation) {
                 calculatorView.showResult(String.format("%s\n%s%s", firstNumber, operand, secondNumber));
             } else {
                 calculatorView.showResult(String.format("%s%s%s", firstNumber, operand, secondNumber));

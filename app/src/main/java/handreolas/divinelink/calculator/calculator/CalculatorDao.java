@@ -11,19 +11,26 @@ import androidx.room.Transaction;
 public abstract class CalculatorDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract void insertCalculation(CalculatorDomain calculatorDomain);
+    abstract void insertCalculation(CalculatorDomain calculatorDomain, CalculatorDomain formattedDomain);
 
-    @Query("SELECT * From Calculations")
-    public abstract CalculatorDomain getDB();
-
-    @Query("SELECT numberA From Calculations")
+    @Query("SELECT numberA From Calculations WHERE id = 0")
     public abstract String getFirstNumber();
 
-    @Query("SELECT numberB From Calculations")
+    @Query("SELECT numberB From Calculations WHERE id = 0")
     public abstract String getSecondNumber();
 
-    @Query("SELECT result From Calculations")
+    @Query("SELECT result From Calculations WHERE id = 0")
     public abstract String getResult();
+
+    @Query("SELECT numberA From Calculations WHERE id = 1")
+    public abstract String getFormattedFirstNumber();
+
+    @Query("SELECT numberB From Calculations WHERE id = 1")
+    public abstract String getFormattedSecondNumber();
+
+    @Query("SELECT result From Calculations WHERE id = 1")
+    public abstract String getFormattedResult();
+
 
     @Query("SELECT operation From Calculations")
     public abstract String getOperator();
@@ -31,32 +38,43 @@ public abstract class CalculatorDao {
     @Query("DELETE FROM Calculations")
     abstract void deleteAll();
 
-    @Query("UPDATE Calculations SET numberA = :firstNumber")
+
+    @Query("UPDATE Calculations SET numberA = :firstNumber WHERE id = 0")
     abstract void updateFirstNumber(String firstNumber);
 
-    @Query("UPDATE Calculations SET numberB = :secondNumber")
+    @Query("UPDATE Calculations SET numberB = :secondNumber  WHERE id = 0")
     abstract void updateSecondNumber(String secondNumber);
 
-    @Query("UPDATE Calculations SET result = :result")
+    @Query("UPDATE Calculations SET result = :result WHERE  id = 0")
     abstract void updateResult(String result);
+
+
+    @Query("UPDATE Calculations SET numberA = :firstNumber WHERE id = 1")
+    abstract void updateFormattedFirstNumber(String firstNumber);
+
+    @Query("UPDATE Calculations SET numberB = :secondNumber  WHERE id = 1")
+    abstract void updateFormattedSecondNumber(String secondNumber);
+
+    @Query("UPDATE Calculations SET result = :result WHERE  id = 1")
+    abstract void updateFormattedResult(String result);
+
 
     @Query("UPDATE Calculations SET operation = :operand")
     abstract void updateOperation(String operand);
 
-
     @Transaction
     public void clearEntries() {
         deleteAll();
-        insertCalculation(new CalculatorDomain(null, null, null, null));
+        insertCalculation(
+                new CalculatorDomain(0, null, null, null, null), // Non Formatted
+                new CalculatorDomain(1, null, null, null, null));  // Formatted
     }
 
     @Transaction
-    public void updateCalculator(CalculatorDomain calculatorDomain) {
+    public void updateCalculator(CalculatorDomain calculatorDomain, CalculatorDomain formattedDomain) {
         deleteAll();
-        insertCalculation(calculatorDomain);
+        insertCalculation(calculatorDomain, formattedDomain);
     }
-
-
 
 
 }

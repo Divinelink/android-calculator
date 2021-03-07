@@ -19,7 +19,8 @@ public class CalculatorDomain {
     public CalculatorDomain() {
     }
 
-    public CalculatorDomain(String numberA, String numberB, String result, String operation) {
+    public CalculatorDomain(int id, String numberA, String numberB, String result, String operation) {
+        this.id = id;
         this.numberA = numberA;
         this.numberB = numberB;
         this.result = result;

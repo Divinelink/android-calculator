@@ -14,9 +14,6 @@ public interface ICalculatorInteractor {
 
     void clearEntries(OnGetResultFinishListener listener, Context ctx);
 
-
-
-
     interface OnGetResultFinishListener{
         void onShowResult(String firstNumber, String secondNumber, String operand, String finalResult);
         void onClear();
