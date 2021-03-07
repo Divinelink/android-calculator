@@ -295,9 +295,10 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
     private String formatNumber(String number) {
         // roundAfter - How long do we want number to be in order to show scientific number notation.
         String formattedNumber;
-        //FIXME 0.60000000 x 6 should return 3.6 not 3.600000000
+
         Locale.setDefault(Locale.US);
 
+        // TODO 0.000000000000000 should not return 0E0 on calculation View
 
         if (number != null) {
             if (number.length() > NUMBER_LENGTH_FOR_CALCULATION) {

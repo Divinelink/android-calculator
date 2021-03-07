@@ -18,35 +18,33 @@
 
         <TextView
             android:id="@+id/calculationTextView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="40dp"
             android:gravity="center|end"
             android:textColor="@color/black"
             android:textSize="50sp"
             app:autoSizeMaxTextSize="50sp"
             app:autoSizeMinTextSize="25sp"
-            app:autoSizeStepGranularity="3sp"
+            app:autoSizeStepGranularity="5sp"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/resultTextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/verticalEnd"
+            app:layout_constraintStart_toStartOf="@+id/verticalStart"
             app:layout_constraintTop_toTopOf="@+id/horizontalCalculationTVGuideline"
             tools:text="00000" />
 
         <TextView
             android:id="@+id/resultTextView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginStart="40dp"
             android:gravity="center|end"
             android:textSize="35sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/verticalEnd"
+            app:layout_constraintStart_toStartOf="@+id/verticalStart"
             tools:text="Result" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -55,6 +53,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -71,7 +84,7 @@
         android:orientation="vertical">
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonDivision"
             style="@style/RoundCalculatorButtons.Operations"
             android:text="&#xf7;"
@@ -80,7 +93,7 @@
             app:layout_constraintStart_toStartOf="@+id/verticalThird"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonMultiplication"
             style="@style/RoundCalculatorButtons.Operations"
             android:scaleType="centerInside"
@@ -90,7 +103,7 @@
             app:layout_constraintStart_toEndOf="@+id/verticalThird"
             app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSubtraction"
             style="@style/RoundCalculatorButtons.Operations"
             android:text="&#x2212;"
@@ -99,7 +112,7 @@
             app:layout_constraintStart_toEndOf="@+id/verticalThird"
             app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonAddition"
             style="@style/RoundCalculatorButtons.Operations"
             android:text="&#x2b;"
@@ -111,7 +124,7 @@
             app:layout_constraintTop_toTopOf="@+id/horizontalThird"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonResult"
             style="@style/RoundCalculatorButtons.Operations"
             android:text="&#x3d;"
@@ -130,7 +143,7 @@
             app:layout_constraintStart_toStartOf="@+id/verticalFirst"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonPercent"
             style="@style/RoundCalculatorButtons.Percentage"
             android:text="&#xFF05;"
