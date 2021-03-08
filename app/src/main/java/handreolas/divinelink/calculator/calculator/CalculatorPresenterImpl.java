@@ -78,7 +78,7 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
 
     @Override
     public void onError(String error) {
-        calculatorView.onClearTextViews();
+
     }
 
     @Override
