@@ -12,6 +12,10 @@ interface ICalculatorPresenter {
 
     void backspace(Context ctx);
 
+    void result(Context ctx);
+
+    void percentage(Context ctx);
+
     void setOperand(Context ctx, String operand);
     void getOperand(Context ctx);
 

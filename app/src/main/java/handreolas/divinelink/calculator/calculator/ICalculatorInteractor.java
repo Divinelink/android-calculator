@@ -16,6 +16,10 @@ public interface ICalculatorInteractor {
 
     void backspace(OnGetResultFinishListener listener, Context ctx);
 
+    void result(OnGetResultFinishListener listener, Context ctx);
+
+    void percentage(OnGetResultFinishListener listener, Context ctx);
+
     interface OnGetResultFinishListener{
         void onShowResult(String firstNumber, String secondNumber, String operand, String finalResult);
         void onClear();

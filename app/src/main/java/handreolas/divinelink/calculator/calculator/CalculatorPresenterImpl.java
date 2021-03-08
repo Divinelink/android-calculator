@@ -87,6 +87,16 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
     }
 
     @Override
+    public void result(Context ctx) {
+        interactor.result(this, ctx);
+    }
+
+    @Override
+    public void percentage(Context ctx) {
+        interactor.percentage(this, ctx);
+    }
+
+    @Override
     public void backspace(Context ctx) {
         interactor.backspace(this, ctx);
     }
