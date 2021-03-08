@@ -161,7 +161,6 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
         });
     }
 
-
     @Override
     public void setComma(OnGetResultFinishListener listener, Context ctx) {
         AsyncTask.execute(new Runnable() {
@@ -180,7 +179,6 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                     calculatorDao.updateFirstNumber(currentNumber);
                     calculatorDao.updateFormattedFirstNumber(formatNumber(currentNumber));
                     result = currentNumber;
-
                 } else {
                     currentNumber = checkIfCurrentNumberIsNull(secondNumber, ".");
                     calculatorDao.updateSecondNumber(currentNumber);
@@ -211,6 +209,59 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
         });
     }
 
+    @Override
+    public void backspace(OnGetResultFinishListener listener, Context ctx) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                final CalculatorDao calculatorDao = HomeDatabase.getDatabase(ctx).calculatorDao();
+                String currentNumber;
+                String firstNumber = calculatorDao.getFirstNumber();
+                String secondNumber = calculatorDao.getSecondNumber();
+                String result = calculatorDao.getResult();
+                String operand = calculatorDao.getOperator();
+
+                if (operand == null) {
+                    currentNumber = removeLastElementFromString(firstNumber);
+                    calculatorDao.updateFirstNumber(currentNumber);
+                    calculatorDao.updateFormattedFirstNumber(formatNumber(currentNumber));
+                    result = currentNumber;
+
+                } else {
+                    if (secondNumber != null) {
+                        currentNumber = removeLastElementFromString(secondNumber);
+                        calculatorDao.updateSecondNumber(currentNumber);
+                        calculatorDao.updateFormattedSecondNumber(formatNumber(currentNumber));
+                        if (currentNumber != null)
+                            result = calculateResult(firstNumber, currentNumber, operand);
+                        else
+                            result = firstNumber;
+                    } else { // If secondNumber is null, it means there's an operand left, so we only return the first Number.
+                        calculatorDao.updateOperation(null);
+                        result = firstNumber;
+                    }
+                }
+                calculatorDao.updateResult(result);
+                calculatorDao.updateFormattedResult(formatNumberForResult(result, true));
+
+                listener.onShowResult(
+                        calculatorDao.getFormattedFirstNumber(),
+                        calculatorDao.getFormattedSecondNumber(),
+                        calculatorDao.getOperator(),
+                        calculatorDao.getFormattedResult());
+            }
+        });
+    }
+
+    // Helper Method
+    public String removeLastElementFromString(String str) {
+        if (str == null || str.length() == 1)
+            return null;
+        else if (str.length() > 1)
+            return str.substring(0, str.length() - 1);
+        else
+            return null;
+    }
 
     private String calculateResult(String firstNumber, String secondNumber, String operand) {
         String result;
@@ -331,6 +382,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
             return number.length();
         }
     }
+
 
     // Helper Method
     private int getFractionDigits(String number) {

@@ -10,6 +10,8 @@ interface ICalculatorPresenter {
 
     void clearNumber(Context ctx);
 
+    void backspace(Context ctx);
+
     void setOperand(Context ctx, String operand);
     void getOperand(Context ctx);
 

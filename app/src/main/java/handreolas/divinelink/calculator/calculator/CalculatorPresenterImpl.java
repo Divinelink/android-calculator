@@ -54,7 +54,10 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
 
         int lengthLimitOnCalculation = 25;
 
-        if (operand == null) {
+
+        if (firstNumber == null)
+            calculatorView.onClearTextViews();
+        else if (operand == null) {
             calculatorView.showResult(firstNumber);
         } else if (secondNumber == null) {
             calculatorView.showResult(firstNumber + operand);
@@ -68,7 +71,9 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
                 calculatorView.showResult(String.format("%s%s%s", firstNumber, operand, secondNumber));
             }
         }
-        calculatorView.showResultOnResultTV(finalResult);
+
+        if (finalResult != null)
+            calculatorView.showResultOnResultTV(finalResult);
     }
 
     @Override
@@ -81,9 +86,12 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
         // Do nothing. Simply do not add any more digits
     }
 
+    @Override
+    public void backspace(Context ctx) {
+        interactor.backspace(this, ctx);
+    }
 
-
-//    @Override
+    //    @Override
 //    public void onSuccess(String number, String operand) {
 ////        mLengthOfResult = number.length() + operand.length();
 //        calculatorView.showResult(number + operand);

@@ -130,7 +130,9 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
         mDivision.setOnClickListener(this::onClick);
         mAddition.setOnClickListener(this::onClick);
         mSubtraction.setOnClickListener(this::onClick);
-//        mDelete.setOnClickListener(this::onClick);
+        mDelete.setOnClickListener(this::onClick);
+
+        mBackspace.setOnClickListener(this::onClick);
 
 
         presenter = new CalculatorPresenterImpl(this);
@@ -174,8 +176,9 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
             presenter.setOperand(getContext(), "÷");
         } else if (v.getId() == R.id.buttonComma) {
             presenter.setComma(getContext());
+        } else if (v.getId() == R.id.buttonBackspace){
+            presenter.backspace(getContext());
         }
-
     }
 
 
