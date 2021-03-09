@@ -57,11 +57,8 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                             calculatorDao.getResult(),
                             calculatorDao.getOperator()));
 
-                    listener.onShowResult( //FIXME pass Object instead of Strings
-                            calculatorDao.getFirstNumber(),
-                            calculatorDao.getSecondNumber(),
-                            calculatorDao.getOperator(),
-                            calculatorDao.getResult());
+                    listener.onShowResult(calculatorDao.getCalculatorDomain());
+
                 } else { // User is limited to 15 digit number input.
                     listener.onTooManyDigits();
                 }
@@ -81,11 +78,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                 if (result == null) {
                     listener.onClear();
                 } else {
-                    listener.onShowResult(
-                            calculatorDao.getFirstNumber(),
-                            calculatorDao.getSecondNumber(),
-                            calculatorDao.getOperator(),
-                            calculatorDao.getResult());
+                    listener.onShowResult(calculatorDao.getCalculatorDomain());
                 }
             }
         });
@@ -120,23 +113,13 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                 if (result.equals("NaN")) {
                     calculatorDao.updateFirstNumber(null);
                     calculatorDao.updateResult(null);
-
-//                    calculatorDao.updateSecondNumber(null);
                     calculatorDao.updateSecondNumber(null);
-
-//                    calculatorDao.updateFirstNumber(null);
-//                    calculatorDao.updateResult(null);
-
                     calculatorDao.updateOperation(null);
-
                     listener.onError("NaN");
                 } else {
                     if (previousOperand == null) { // If there's no current operand, all you have to do is update the first number in DB,
-//                        if (calculatorDao.getFirstNumber() == null) {
                         if (calculatorDao.getFirstNumber() == null) {
-//                            calculatorDao.updateFirstNumber("0");
                             calculatorDao.updateFirstNumber("0");
-//                            calculatorDao.updateResult("0");
                             calculatorDao.updateResult("0");
                         }
                     } else { // Otherwise, first number becomes the current result, second number becomes "null" and  we change the current operand.
@@ -150,11 +133,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                     }
                     calculatorDao.updateOperation(operand);
 
-                    listener.onShowResult(
-                            calculatorDao.getFirstNumber(),
-                            calculatorDao.getSecondNumber(),
-                            calculatorDao.getOperator(),
-                            calculatorDao.getResult());
+                    listener.onShowResult(calculatorDao.getCalculatorDomain());
 
                 }
             }
@@ -194,11 +173,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                             calculatorDao.getResult(),
                             calculatorDao.getOperator()));
 
-                    listener.onShowResult(
-                            calculatorDao.getFirstNumber(),
-                            calculatorDao.getSecondNumber(),
-                            calculatorDao.getOperator(),
-                            calculatorDao.getResult());
+                    listener.onShowResult(calculatorDao.getCalculatorDomain());
                 } else { // User is limited to 20 or 15 digit number input.
                     listener.onTooManyDigits();
                 }
@@ -251,11 +226,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                 }
 
                 calculatorDao.updateResult(formatNumberForResult(result, true));
-                listener.onShowResult(
-                        calculatorDao.getFirstNumber(),
-                        calculatorDao.getSecondNumber(),
-                        calculatorDao.getOperator(),
-                        calculatorDao.getResult());
+                listener.onShowResult(calculatorDao.getCalculatorDomain());
             }
         });
     }
@@ -272,10 +243,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                 calculatorDao.updateSecondNumber(null);
                 calculatorDao.updateFirstNumber(calculatorDao.getResult());
 
-                listener.onShowResult(calculatorDao.getFirstNumber(),
-                        null,
-                        null,
-                        calculatorDao.getResult());
+                listener.onShowResult(new CalculatorDomain(calculatorDao.getFirstNumber(), null, null, calculatorDao.getResult()));
             }
         });
     }
@@ -310,11 +278,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
 
                 calculatorDao.updateResult(formatNumberForResult(result, true));
                 if (!result.equals("0") || secondNumber != null) {
-                    listener.onShowResult(
-                            calculatorDao.getFirstNumber(),
-                            calculatorDao.getSecondNumber(),
-                            calculatorDao.getOperator(),
-                            calculatorDao.getResult());
+                    listener.onShowResult(calculatorDao.getCalculatorDomain());
                 } else {
                     calculatorDao.updateFirstNumber(null);
                     calculatorDao.updateResult(null);

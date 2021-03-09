@@ -21,7 +21,7 @@ public interface ICalculatorInteractor {
     void percentage(OnGetResultFinishListener listener, Context ctx);
 
     interface OnGetResultFinishListener{
-        void onShowResult(String firstNumber, String secondNumber, String operand, String finalResult);
+        void onShowResult(CalculatorDomain calculatorDomain);
         void onClear();
         void onError(String error);
         void onTooManyDigits();

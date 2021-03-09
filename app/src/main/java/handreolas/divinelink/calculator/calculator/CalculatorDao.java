@@ -13,6 +13,9 @@ public abstract class CalculatorDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void insertCalculation(CalculatorDomain formattedDomain);
 
+    @Query("SELECT * FROM CALCULATIONS")
+    public abstract CalculatorDomain getCalculatorDomain();
+
     @Query("SELECT numberA From Calculations")
     public abstract String getFirstNumber();
 
@@ -21,7 +24,6 @@ public abstract class CalculatorDao {
 
     @Query("SELECT result From Calculations")
     public abstract String getResult();
-
 
     @Query("SELECT operation From Calculations")
     public abstract String getOperator();

@@ -50,10 +50,13 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
 
 
     @Override
-    public void onShowResult(String firstNumber, String secondNumber, String operand, String finalResult) {
+    public void onShowResult(CalculatorDomain calculatorDomain) {
 
         int lengthLimitOnCalculation = 25;
-
+        String firstNumber = calculatorDomain.getNumberA();
+        String secondNumber = calculatorDomain.getNumberB();
+        String operand = calculatorDomain.getOperation();
+        String finalResult = calculatorDomain.getResult();
 
         if (firstNumber == null)
             calculatorView.onClearTextViews();
