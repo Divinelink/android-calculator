@@ -1,7 +1,11 @@
 package handreolas.divinelink.calculator.calculator;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
@@ -196,6 +200,7 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                 @Override
                 public void run() {
                     mCalculationTV.setText(result);
+
                 }
             });
         }
@@ -206,13 +211,22 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
 
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void run() {
+                    mResultTV.setTextSize(mResultTV.getAutoSizeMaxTextSize());
                     mResultTV.setText(String.format("= %s", result));
                     mResultTV.setVisibility(View.VISIBLE);
 
+                    mResultTV.setTextColor(getContext().getResources().getColor(android.R.color.tab_indicator_text));
+                    mCalculationTV.setTextColor(getContext().getResources().getColor(android.R.color.black));
+
+                    mResultTV.setTextSize(35);
+                    mCalculationTV.setTextSize(40);
+
+
                     ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mGuideLineResult.getLayoutParams();
-                    params.guidePercent = 0.6f; // 45% // range: 0 <-> 1
+                    params.guidePercent = 0.60f; // 45% // range: 0 <-> 1
 
                     mGuideLineResult.setLayoutParams(params);
                 }
@@ -229,10 +243,57 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                     mCalculationTV.setText("0");
                     mResultTV.setVisibility(View.GONE);
 
+                    mResultTV.setTextColor(getContext().getResources().getColor(android.R.color.tab_indicator_text));
+                    mCalculationTV.setTextColor(getContext().getResources().getColor(android.R.color.black));
+
+                    mResultTV.setTextSize(35);
+                    mCalculationTV.setTextSize(40);
+
+
                     ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mGuideLineResult.getLayoutParams();
                     params.guidePercent = 0.8f;
 
                     mGuideLineResult.setLayoutParams(params);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void resultOnButtonPress(String result) {
+
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mGuideLineResult.getLayoutParams();
+                    params.guidePercent = 0.60f; // 60% // range: 0 <-> 1
+                    mGuideLineResult.setLayoutParams(params);
+
+                    final TextView tv = mResultTV;
+//                    mCalculationTV.setText(result);
+//                    tv.setText(result);
+                    mResultTV.setTextColor(getContext().getResources().getColor(android.R.color.black));
+                    mCalculationTV.setTextColor(getContext().getResources().getColor(android.R.color.tab_indicator_text));
+
+                    final float startSize = mResultTV.getTextSize() /  getResources().getDisplayMetrics().scaledDensity; // Size in SP
+                    final float endSize = 80 / getResources().getDisplayMetrics().scaledDensity; // Temp Values, will make them dynamic
+
+                    long animationDuration = 200; // Animation duration in ms
+
+                    ValueAnimator animator = ValueAnimator.ofFloat(startSize, endSize);
+                    animator.setDuration(animationDuration);
+
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            float animatedValue = (float) valueAnimator.getAnimatedValue();
+                            tv.setTextSize(animatedValue);
+                        }
+                    });
+
+                    animator.start();
+
                 }
             });
         }

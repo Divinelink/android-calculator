@@ -52,7 +52,7 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
     @Override
     public void onShowResult(CalculatorDomain calculatorDomain) {
 
-        int lengthLimitOnCalculation = 25;
+        int lengthLimitOnCalculation = 25; //FIXME
         String firstNumber = calculatorDomain.getNumberA();
         String secondNumber = calculatorDomain.getNumberB();
         String operand = calculatorDomain.getOperation();
@@ -77,6 +77,13 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
 
         if (finalResult != null)
             calculatorView.showResultOnResultTV(finalResult);
+    }
+
+    @Override
+    public void onButtonResult(CalculatorDomain calculatorDomain) {
+        // This is called from @result method on Domain Model, when we press the Result Button.
+        calculatorView.resultOnButtonPress(calculatorDomain.getResult());
+
     }
 
     @Override

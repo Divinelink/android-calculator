@@ -74,12 +74,17 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                 final CalculatorDao calculatorDao = HomeDatabase.getDatabase(ctx).calculatorDao();
 
                 String result = calculatorDao.getResult();
+                String firstNumber = calculatorDao.getFirstNumber();
 
                 if (result == null) {
                     listener.onClear();
-                } else {
+                } else if (result != null && firstNumber != null) {
                     listener.onShowResult(calculatorDao.getCalculatorDomain());
+                } else if (result != null && firstNumber == null){
+                    listener.onShowResult(calculatorDao.getSavedCalculatorDomain());
+                    listener.onButtonResult(calculatorDao.getSavedCalculatorDomain());
                 }
+
             }
         });
     }
@@ -104,6 +109,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                 final CalculatorDao calculatorDao = HomeDatabase.getDatabase(ctx).calculatorDao();
 
                 String result;
+
                 String previousOperand;
 
                 result = calculatorDao.getResult() == null ? "0" : (calculatorDao.getResult());
@@ -118,10 +124,15 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                     listener.onError("NaN");
                 } else {
                     if (previousOperand == null) { // If there's no current operand, all you have to do is update the first number in DB,
-                        if (calculatorDao.getFirstNumber() == null) {
+                        if (calculatorDao.getFirstNumber() == null && result.equals("0")) {
                             calculatorDao.updateFirstNumber("0");
                             calculatorDao.updateResult("0");
+                        } else if (calculatorDao.getFirstNumber() == null && result != null) {
+                            // This is executed when we have pressed result button (everything turns into null except result) and then press some operand.
+                            // We basically set first number to be equal to result.
+                            calculatorDao.updateFirstNumber(result);
                         }
+
                     } else { // Otherwise, first number becomes the current result, second number becomes "null" and  we change the current operand.
                         // Set result variable to be the formatted version of the result value we have on DB.
                         // For example, if we have the value 258,297.2117865 on result, what is actually shown on the app is 258,297.212
@@ -235,15 +246,19 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
     public void result(OnGetResultFinishListener listener, Context ctx) {
         AsyncTask.execute(new Runnable() {
             @Override
-            //TODO change what result does. Focus on Result View and remove other values from number A and B.
+            // When we press result button, set NumberA, NumberB and Operand to null on DB.
+            // Then pass the result on presenter and start animation on result text view.
             public void run() {
                 final CalculatorDao calculatorDao = HomeDatabase.getDatabase(ctx).calculatorDao();
 
+                calculatorDao.insertCalculation(new CalculatorDomain(1, calculatorDao.getFirstNumber(), calculatorDao.getSecondNumber(), calculatorDao.getResult(), calculatorDao.getOperator()));
+
                 calculatorDao.updateOperation(null);
                 calculatorDao.updateSecondNumber(null);
-                calculatorDao.updateFirstNumber(calculatorDao.getResult());
+                calculatorDao.updateFirstNumber(null);
 
-                listener.onShowResult(new CalculatorDomain(calculatorDao.getFirstNumber(), null, null, calculatorDao.getResult()));
+//                listener.onShowResult(calculatorDao.getSavedCalculatorDomain());
+                listener.onButtonResult(calculatorDao.getSavedCalculatorDomain());
             }
         });
     }

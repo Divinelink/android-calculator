@@ -16,6 +16,27 @@ public abstract class CalculatorDao {
     @Query("SELECT * FROM CALCULATIONS")
     public abstract CalculatorDomain getCalculatorDomain();
 
+    @Query("SELECT * FROM CALCULATIONS WHERE id = 1")
+    public abstract CalculatorDomain getSavedCalculatorDomain();
+
+    @Query("SELECT numberA From Calculations WHERE id = 1 ")
+    public abstract String getSavedFirstNumber();
+
+    @Query("SELECT numberB From Calculations WHERE id = 1")
+    public abstract String getSavedSecondNumber();
+
+    @Query("SELECT operation From Calculations WHERE id = 1")
+    public abstract String getSavedOperand();
+
+    @Query("UPDATE Calculations SET numberA = :firstNumber WHERE id = 1")
+    abstract void updateSavedFirstNumber(String firstNumber);
+
+    @Query("UPDATE Calculations SET numberB = :secondNumber WHERE id = 1")
+    abstract void updateSavedSecondNumber(String secondNumber);
+
+    @Query("UPDATE Calculations SET operation = :operand WHERE id = 1")
+    abstract void updateSavedOperation(String operand);
+
     @Query("SELECT numberA From Calculations")
     public abstract String getFirstNumber();
 
@@ -31,17 +52,16 @@ public abstract class CalculatorDao {
     @Query("DELETE FROM Calculations")
     abstract void deleteAll();
 
-    @Query("UPDATE Calculations SET numberA = :firstNumber")
+    @Query("UPDATE Calculations SET numberA = :firstNumber WHERE id = 0")
     abstract void updateFirstNumber(String firstNumber);
 
-    @Query("UPDATE Calculations SET numberB = :secondNumber")
+    @Query("UPDATE Calculations SET numberB = :secondNumber WHERE id = 0")
     abstract void updateSecondNumber(String secondNumber);
 
-    @Query("UPDATE Calculations SET result = :result")
+    @Query("UPDATE Calculations SET result = :result WHERE id = 0")
     abstract void updateResult(String result);
 
-
-    @Query("UPDATE Calculations SET operation = :operand")
+    @Query("UPDATE Calculations SET operation = :operand WHERE id = 0")
     abstract void updateOperation(String operand);
 
     @Transaction

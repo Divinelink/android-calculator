@@ -5,7 +5,9 @@ import android.content.Context;
 interface ICalculatorPresenter {
 
     void setNumber(Context ctx, String number);
+
     void setComma(Context ctx);
+
     void getNumber(Context ctx);
 
     void clearNumber(Context ctx);
@@ -17,9 +19,7 @@ interface ICalculatorPresenter {
     void percentage(Context ctx);
 
     void setOperand(Context ctx, String operand);
+
     void getOperand(Context ctx);
-
-
-
 
 }

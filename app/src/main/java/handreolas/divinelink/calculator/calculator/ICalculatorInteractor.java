@@ -20,14 +20,17 @@ public interface ICalculatorInteractor {
 
     void percentage(OnGetResultFinishListener listener, Context ctx);
 
-    interface OnGetResultFinishListener{
+    interface OnGetResultFinishListener {
         void onShowResult(CalculatorDomain calculatorDomain);
+
         void onClear();
+
         void onError(String error);
+
         void onTooManyDigits();
+
+        void onButtonResult(CalculatorDomain calculatorDomain);
     }
-
-
 
 
 }

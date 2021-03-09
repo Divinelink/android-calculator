@@ -7,4 +7,6 @@ public interface ICalculatorView {
     void showResultOnResultTV(String result);
 
     void onClearTextViews();
+
+    void resultOnButtonPress(String result);
 }
