@@ -27,6 +27,8 @@ public interface ICalculatorInteractor {
 
         void onError(String error);
 
+        void onDivisionByZero();
+
         void onTooManyDigits();
 
         void onButtonResult(CalculatorDomain calculatorDomain);

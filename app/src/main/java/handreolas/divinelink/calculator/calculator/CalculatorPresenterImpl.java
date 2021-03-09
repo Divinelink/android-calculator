@@ -1,11 +1,6 @@
 package handreolas.divinelink.calculator.calculator;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.icu.text.ScientificNumberFormatter;
-import android.util.Log;
-
-import java.util.Locale;
 
 public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculatorInteractor.OnGetResultFinishListener {
 
@@ -111,15 +106,14 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
         interactor.backspace(this, ctx);
     }
 
-    //    @Override
-//    public void onSuccess(String number, String operand) {
-////        mLengthOfResult = number.length() + operand.length();
-//        calculatorView.showResult(number + operand);
-//    }
-
 
     @Override
     public void onClear() {
         calculatorView.onClearTextViews();
+    }
+
+    @Override
+    public void onDivisionByZero() {
+        calculatorView.showResultOnResultTV("Can't divide by zero");
     }
 }

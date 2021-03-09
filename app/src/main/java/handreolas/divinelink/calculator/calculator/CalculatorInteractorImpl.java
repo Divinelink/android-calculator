@@ -44,23 +44,27 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                     currentNumber = checkIfCurrentNumberIsNull(secondNumber, addedNumber);
                     if (getLengthOfNumberWithoutCommas(currentNumber) <= getLengthLimit(currentNumber)) {
 
-                        calculatorDao.updateSecondNumber(formatNumber(currentNumber));
-
                         result = calculateResult(firstNumber, currentNumber, operand);
+                        if (result.equals("Can't divide by zero")) //FIXME
+                            listener.onDivisionByZero();
+                        else
+                            calculatorDao.updateSecondNumber(formatNumber(currentNumber));
                     }
                 }
-                calculatorDao.updateResult(formatNumberForResult(result, true));
-                if (getLengthOfNumberWithoutCommas(currentNumber) <= getLengthLimit(currentNumber)) {
+                if (!result.equals("Can't divide by zero")) {
+                    calculatorDao.updateResult(formatNumberForResult(result, true));
+                    if (getLengthOfNumberWithoutCommas(currentNumber) <= getLengthLimit(currentNumber)) {
 
-                    calculatorDao.updateCalculator(new CalculatorDomain(calculatorDao.getFirstNumber(),
-                            calculatorDao.getSecondNumber(),
-                            calculatorDao.getResult(),
-                            calculatorDao.getOperator()));
+                        calculatorDao.updateCalculator(new CalculatorDomain(calculatorDao.getFirstNumber(),
+                                calculatorDao.getSecondNumber(),
+                                calculatorDao.getResult(),
+                                calculatorDao.getOperator()));
 
-                    listener.onShowResult(calculatorDao.getCalculatorDomain());
+                        listener.onShowResult(calculatorDao.getCalculatorDomain());
 
-                } else { // User is limited to 15 digit number input.
-                    listener.onTooManyDigits();
+                    } else { // User is limited to 15 digit number input.
+                        listener.onTooManyDigits();
+                    }
                 }
             }
         });
@@ -80,7 +84,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                     listener.onClear();
                 } else if (result != null && firstNumber != null) {
                     listener.onShowResult(calculatorDao.getCalculatorDomain());
-                } else if (result != null && firstNumber == null){
+                } else if (result != null && firstNumber == null) {
                     listener.onShowResult(calculatorDao.getSavedCalculatorDomain());
                     listener.onButtonResult(calculatorDao.getSavedCalculatorDomain());
                 }
@@ -251,7 +255,8 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
             public void run() {
                 final CalculatorDao calculatorDao = HomeDatabase.getDatabase(ctx).calculatorDao();
 
-                calculatorDao.insertCalculation(new CalculatorDomain(1, calculatorDao.getFirstNumber(), calculatorDao.getSecondNumber(), calculatorDao.getResult(), calculatorDao.getOperator()));
+                if (calculatorDao.getFirstNumber() != null) // If you double press result button and don't have this condition, saved numbers become null.
+                    calculatorDao.insertCalculation(new CalculatorDomain(1, calculatorDao.getFirstNumber(), calculatorDao.getSecondNumber(), calculatorDao.getResult(), calculatorDao.getOperator()));
 
                 calculatorDao.updateOperation(null);
                 calculatorDao.updateSecondNumber(null);
@@ -308,15 +313,21 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
     private String percentNumber(String number) {
         String result;
         BigDecimal bi1;
+
+        if (number.equals("0"))
+            return "0";
+
         try {
             bi1 = new BigDecimal(number);
         } catch (Exception e) {
             return "NaN";
         }
 
-        result = String.valueOf(bi1.divide(BigDecimal.valueOf(100), 7, RoundingMode.FLOOR));
-
-        return new DecimalFormat("0.#######").format(Double.parseDouble(result)); // Remove trailing zeroes
+        result = String.valueOf(bi1.divide(BigDecimal.valueOf(100), 8, RoundingMode.CEILING));
+        if (result.contains("E"))
+            return formatNumber(result);
+        else
+            return new DecimalFormat("0.########").format(Double.parseDouble(result)); // Remove trailing zeroes
     }
 
     // Helper Method
@@ -336,6 +347,11 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
 
         firstNumber = removeCommasFromNumber(firstNumber);
         secondNumber = removeCommasFromNumber(secondNumber);
+
+        if (operand.equals("÷")) {
+            if (secondNumber.equals("0"))
+                return "Can't divide by zero";
+        }
 
         try {
             bi1 = new BigDecimal(firstNumber);
