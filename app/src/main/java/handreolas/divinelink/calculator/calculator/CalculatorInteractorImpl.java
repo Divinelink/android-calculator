@@ -1,25 +1,19 @@
 package handreolas.divinelink.calculator.calculator;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Build;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-import androidx.annotation.RequiresApi;
 import handreolas.divinelink.calculator.base.HomeDatabase;
-import handreolas.divinelink.calculator.features.SharedPrefManager;
 
 public class CalculatorInteractorImpl implements ICalculatorInteractor {
 
-    public int LENGTH_FOR_CALCULATION_VIEW_WITH_COMMA = 20;
-    public int LENGTH_FOR_CALCULATION_VIEW_WITHOUT_COMMA = 15;
+    public int LENGTH_LIMIT_FOR_DECIMALS = 20;
+    public int LENGTH_LIMIT_FOR_INTEGERS = 15;
 
     //TODO Fix what happens when there's a huge number with exponential more than 300
     @Override
@@ -31,48 +25,43 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                 final CalculatorDao calculatorDao = HomeDatabase.getDatabase(ctx).calculatorDao();
 
                 String currentNumber;
+
                 String firstNumber = calculatorDao.getFirstNumber();
                 String secondNumber = calculatorDao.getSecondNumber();
                 String result = calculatorDao.getResult();
-                String operand = calculatorDao.getOperator();
-                int lengthOfCurrentNumber;
 
+                String operand = calculatorDao.getOperator();
 
                 if (operand == null) {
                     currentNumber = checkIfCurrentNumberIsNull(firstNumber, addedNumber);
-                    lengthOfCurrentNumber = (!currentNumber.contains(".") ? LENGTH_FOR_CALCULATION_VIEW_WITHOUT_COMMA : LENGTH_FOR_CALCULATION_VIEW_WITH_COMMA);  // If number contains comma, then length should be 20
-                    if (currentNumber.length() <= lengthOfCurrentNumber) {
-                        // UPDATES VALUES ON DB
-                        calculatorDao.updateFirstNumber(formatNumberForExponentialNotation(currentNumber, true)); //FIXME
-                        calculatorDao.updateFormattedFirstNumber(formatNumber(currentNumber, true)); //FIXME
-                        // END UPDATES ON DB
+                    if (getLengthOfNumberWithoutCommas(currentNumber) <= getLengthLimit(currentNumber)) {  // If number IS decimal, then length should be 24
+
+                        calculatorDao.updateFirstNumber(formatNumber(currentNumber));
+
                         result = currentNumber;
                     }
                 } else {
                     currentNumber = checkIfCurrentNumberIsNull(secondNumber, addedNumber);
-                    lengthOfCurrentNumber = (!currentNumber.contains(".") ? LENGTH_FOR_CALCULATION_VIEW_WITHOUT_COMMA : LENGTH_FOR_CALCULATION_VIEW_WITH_COMMA);
-                    if (currentNumber.length() <= lengthOfCurrentNumber) {
-                        // UPDATE VALUES ON DB
-                        calculatorDao.updateSecondNumber(formatNumberForExponentialNotation(currentNumber, true)); //FIXME
-                        calculatorDao.updateFormattedSecondNumber(formatNumber(currentNumber,true)); //FIXME
-                        // END UPDATE VALUES ON DB
+                    if (getLengthOfNumberWithoutCommas(currentNumber) <= getLengthLimit(currentNumber)) {
+
+                        calculatorDao.updateSecondNumber(formatNumber(currentNumber));
+
                         result = calculateResult(firstNumber, currentNumber, operand);
                     }
                 }
-//                result = calculateResult(firstNumber, currentNumber, operand);
-                calculatorDao.updateResult(formatNumberForExponentialNotation(result, false)); //FIXME
-                calculatorDao.updateFormattedResult(formatNumberForResult(calculatorDao.getResult(), true)); //FIXME
-                if (currentNumber.length() <= lengthOfCurrentNumber) {
+                calculatorDao.updateResult(formatNumberForResult(result, true));
+                if (getLengthOfNumberWithoutCommas(currentNumber) <= getLengthLimit(currentNumber)) {
 
-                    calculatorDao.updateCalculator(
-                            new CalculatorDomain(0, calculatorDao.getFirstNumber(), calculatorDao.getSecondNumber(), calculatorDao.getResult(), calculatorDao.getOperator()),
-                            new CalculatorDomain(1, calculatorDao.getFormattedFirstNumber(), calculatorDao.getFormattedSecondNumber(), calculatorDao.getFormattedResult(), calculatorDao.getOperator()));
+                    calculatorDao.updateCalculator(new CalculatorDomain(calculatorDao.getFirstNumber(),
+                            calculatorDao.getSecondNumber(),
+                            calculatorDao.getResult(),
+                            calculatorDao.getOperator()));
 
                     listener.onShowResult( //FIXME pass Object instead of Strings
-                            calculatorDao.getFormattedFirstNumber(),
-                            calculatorDao.getFormattedSecondNumber(),
+                            calculatorDao.getFirstNumber(),
+                            calculatorDao.getSecondNumber(),
                             calculatorDao.getOperator(),
-                            calculatorDao.getFormattedResult());
+                            calculatorDao.getResult());
                 } else { // User is limited to 15 digit number input.
                     listener.onTooManyDigits();
                 }
@@ -93,10 +82,10 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                     listener.onClear();
                 } else {
                     listener.onShowResult(
-                            calculatorDao.getFormattedFirstNumber(),
-                            calculatorDao.getFormattedSecondNumber(),
+                            calculatorDao.getFirstNumber(),
+                            calculatorDao.getSecondNumber(),
                             calculatorDao.getOperator(),
-                            calculatorDao.getFormattedResult());
+                            calculatorDao.getResult());
                 }
             }
         });
@@ -121,58 +110,51 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
             public void run() {
                 final CalculatorDao calculatorDao = HomeDatabase.getDatabase(ctx).calculatorDao();
 
-                String resultFormatted, resultNonFormatted;
+                String result;
                 String previousOperand;
 
-                resultNonFormatted = calculatorDao.getResult() == null ? "0" : (calculatorDao.getResult());
+                result = calculatorDao.getResult() == null ? "0" : (calculatorDao.getResult());
 
                 previousOperand = calculatorDao.getOperator();
 
-                if (resultNonFormatted.equals("NaN")) {
-                    calculatorDao.updateFormattedFirstNumber(null);
-                    calculatorDao.updateFormattedResult(null);
-
-                    calculatorDao.updateSecondNumber(null);
-                    calculatorDao.updateFormattedSecondNumber(null);
-
+                if (result.equals("NaN")) {
                     calculatorDao.updateFirstNumber(null);
                     calculatorDao.updateResult(null);
+
+//                    calculatorDao.updateSecondNumber(null);
+                    calculatorDao.updateSecondNumber(null);
+
+//                    calculatorDao.updateFirstNumber(null);
+//                    calculatorDao.updateResult(null);
 
                     calculatorDao.updateOperation(null);
 
                     listener.onError("NaN");
                 } else {
                     if (previousOperand == null) { // If there's no current operand, all you have to do is update the first number in DB,
+//                        if (calculatorDao.getFirstNumber() == null) {
                         if (calculatorDao.getFirstNumber() == null) {
+//                            calculatorDao.updateFirstNumber("0");
                             calculatorDao.updateFirstNumber("0");
-                            calculatorDao.updateFormattedFirstNumber("0");
+//                            calculatorDao.updateResult("0");
                             calculatorDao.updateResult("0");
-                            calculatorDao.updateFormattedResult("0");
                         }
                     } else { // Otherwise, first number becomes the current result, second number becomes "null" and  we change the current operand.
                         // Set result variable to be the formatted version of the result value we have on DB.
                         // For example, if we have the value 258,297.2117865 on result, what is actually shown on the app is 258,297.212
                         // So, we want to save this value on Result and on NumberA on DB as well.
-                        resultFormatted = calculatorDao.getResult() == null ? "0" : (formatNumberForResult(calculatorDao.getResult(), true));
-                        resultNonFormatted = calculatorDao.getResult() == null ? "0" : (calculatorDao.getResult());
-
-                        calculatorDao.updateFormattedFirstNumber(resultFormatted);
-                        calculatorDao.updateFormattedResult(resultFormatted); // If result is already null, then set firstNumber as zero.
-
-                        calculatorDao.updateFirstNumber(formatNumberForExponentialNotation(resultNonFormatted, true));
-                        calculatorDao.updateResult(formatNumberForExponentialNotation(resultNonFormatted, false)); // resultNonFormatted or resultFormatted?
-
-                        // This happens when firstNumber == 0 and we change operands two times in a row.
+                        result = calculatorDao.getResult() == null ? "0" : (formatNumberForResult(calculatorDao.getResult(), true));
+                        calculatorDao.updateFirstNumber(result);
+                        calculatorDao.updateResult(result); // If result is already null, then set firstNumber as zero.
                         calculatorDao.updateSecondNumber(null);
-                        calculatorDao.updateFormattedSecondNumber(null);
                     }
                     calculatorDao.updateOperation(operand);
 
                     listener.onShowResult(
-                            calculatorDao.getFormattedFirstNumber(),
-                            calculatorDao.getFormattedSecondNumber(),
+                            calculatorDao.getFirstNumber(),
+                            calculatorDao.getSecondNumber(),
                             calculatorDao.getOperator(),
-                            calculatorDao.getFormattedResult());
+                            calculatorDao.getResult());
 
                 }
             }
@@ -186,40 +168,37 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
             public void run() {
                 final CalculatorDao calculatorDao = HomeDatabase.getDatabase(ctx).calculatorDao();
                 String currentNumber;
+
                 String firstNumber = calculatorDao.getFirstNumber();
                 String secondNumber = calculatorDao.getSecondNumber();
-                String result = calculatorDao.getResult();
+                String result;
                 String operand = calculatorDao.getOperator();
-                int lengthOfCurrentNumber;
 
                 if (operand == null) {
                     currentNumber = checkIfCurrentNumberIsNull(firstNumber, ".");
-                    calculatorDao.updateFirstNumber(formatNumberForExponentialNotation(currentNumber, true));
-                    calculatorDao.updateFormattedFirstNumber(formatNumber(currentNumber, true));
+                    calculatorDao.updateFirstNumber(formatNumber(currentNumber));
                     result = currentNumber;
                 } else {
                     currentNumber = checkIfCurrentNumberIsNull(secondNumber, ".");
-                    calculatorDao.updateSecondNumber(formatNumberForExponentialNotation(currentNumber, true));
-                    calculatorDao.updateFormattedSecondNumber(formatNumber(currentNumber, true));
+                    calculatorDao.updateSecondNumber(formatNumber(currentNumber));
                     result = calculateResult(firstNumber, currentNumber, operand);
 
                 }
-                calculatorDao.updateResult(formatNumberForExponentialNotation(result, false));
-                calculatorDao.updateFormattedResult(formatNumberForResult(result, true));
+                calculatorDao.updateResult(formatNumberForResult(result, true));
 
-                lengthOfCurrentNumber = (!currentNumber.contains(".") ? LENGTH_FOR_CALCULATION_VIEW_WITHOUT_COMMA : LENGTH_FOR_CALCULATION_VIEW_WITH_COMMA);
+                if (getLengthOfNumberWithoutCommas(currentNumber) <= getLengthLimit(currentNumber)) { // If number has decimal part, then Length = 20;
 
-                if (currentNumber.length() <= lengthOfCurrentNumber) { // If number has decimal part, then Length = 20;
-
-                    calculatorDao.updateCalculator(
-                            new CalculatorDomain(0, calculatorDao.getFirstNumber(), calculatorDao.getSecondNumber(), calculatorDao.getResult(), calculatorDao.getOperator()),
-                            new CalculatorDomain(1, calculatorDao.getFormattedFirstNumber(), calculatorDao.getFormattedSecondNumber(), calculatorDao.getFormattedResult(), calculatorDao.getOperator()));
+                    calculatorDao.updateCalculator(new CalculatorDomain(
+                            calculatorDao.getFirstNumber(),
+                            calculatorDao.getSecondNumber(),
+                            calculatorDao.getResult(),
+                            calculatorDao.getOperator()));
 
                     listener.onShowResult(
-                            calculatorDao.getFormattedFirstNumber(),
-                            calculatorDao.getFormattedSecondNumber(),
+                            calculatorDao.getFirstNumber(),
+                            calculatorDao.getSecondNumber(),
                             calculatorDao.getOperator(),
-                            calculatorDao.getFormattedResult());
+                            calculatorDao.getResult());
                 } else { // User is limited to 20 or 15 digit number input.
                     listener.onTooManyDigits();
                 }
@@ -232,24 +211,21 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                // When we delete a number in exponential form, we
+
                 final CalculatorDao calculatorDao = HomeDatabase.getDatabase(ctx).calculatorDao();
                 String currentNumber;
-                // When we perform deletion, we calculate result based on the formatted numbers on DB.
-                String firstNumber = removeCommasFromNumber(calculatorDao.getFormattedFirstNumber())
-                        == null ? "0" : removeCommasFromNumber(calculatorDao.getFormattedFirstNumber());
-                String secondNumber = removeCommasFromNumber(calculatorDao.getFormattedSecondNumber());
-                String result = calculatorDao.getResult();
+
+                String firstNumber = removeCommasFromNumber(calculatorDao.getFirstNumber())
+                        == null ? "0" : removeCommasFromNumber(calculatorDao.getFirstNumber());
+                String secondNumber = removeCommasFromNumber(calculatorDao.getSecondNumber());
+
+                String result;
                 String operand = calculatorDao.getOperator();
 
                 if (firstNumber.equals("0") && secondNumber == null) {
-                    calculatorDao.updateFormattedFirstNumber(null);
-                    calculatorDao.updateFormattedResult(null);
-
-                    calculatorDao.updateSecondNumber(null);
-                    calculatorDao.updateFormattedSecondNumber(null);
-
                     calculatorDao.updateFirstNumber(null);
+                    calculatorDao.updateResult(null);
+                    calculatorDao.updateSecondNumber(null);
                     calculatorDao.updateOperation(null);
 
                     result = null;
@@ -258,14 +234,12 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
 
                 } else if (operand == null) {
                     currentNumber = removeLastElementFromString(firstNumber);
-                    calculatorDao.updateFirstNumber(formatNumberForExponentialNotation(currentNumber, true));
-                    calculatorDao.updateFormattedFirstNumber(formatNumber(currentNumber, true));
+                    calculatorDao.updateFirstNumber(formatNumber(currentNumber));
                     result = currentNumber;
                 } else {
                     if (secondNumber != null) {
                         currentNumber = removeLastElementFromString(secondNumber);
-                        calculatorDao.updateSecondNumber(formatNumberForExponentialNotation(currentNumber, true));
-                        calculatorDao.updateFormattedSecondNumber(formatNumber(currentNumber, true));
+                        calculatorDao.updateSecondNumber(formatNumber(currentNumber));
                         if (currentNumber != null)
                             result = calculateResult(firstNumber, currentNumber, operand);
                         else
@@ -275,13 +249,13 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                         result = firstNumber;
                     }
                 }
-                calculatorDao.updateResult(formatNumberForExponentialNotation(result, false));
-                calculatorDao.updateFormattedResult(formatNumberForResult(result, true));
+
+                calculatorDao.updateResult(formatNumberForResult(result, true));
                 listener.onShowResult(
-                        calculatorDao.getFormattedFirstNumber(),
-                        calculatorDao.getFormattedSecondNumber(),
+                        calculatorDao.getFirstNumber(),
+                        calculatorDao.getSecondNumber(),
                         calculatorDao.getOperator(),
-                        calculatorDao.getFormattedResult());
+                        calculatorDao.getResult());
             }
         });
     }
@@ -296,15 +270,12 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
 
                 calculatorDao.updateOperation(null);
                 calculatorDao.updateSecondNumber(null);
-                calculatorDao.updateFormattedSecondNumber(null);
-
                 calculatorDao.updateFirstNumber(calculatorDao.getResult());
-                calculatorDao.updateFormattedFirstNumber(calculatorDao.getFormattedResult());
 
-                listener.onShowResult(calculatorDao.getFormattedFirstNumber(),
+                listener.onShowResult(calculatorDao.getFirstNumber(),
                         null,
                         null,
-                        calculatorDao.getFormattedResult());
+                        calculatorDao.getResult());
             }
         });
     }
@@ -318,43 +289,36 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
 
                 String currentNumber;
                 // When we perform deletion, we calculate result based on the formatted numbers on DB.
-                String firstNumber = removeCommasFromNumber(calculatorDao.getFormattedFirstNumber())
-                        == null ? "0" : removeCommasFromNumber(calculatorDao.getFormattedFirstNumber());
-                String secondNumber = removeCommasFromNumber(calculatorDao.getFormattedSecondNumber());
+                String firstNumber = removeCommasFromNumber(calculatorDao.getFirstNumber())
+                        == null ? "0" : removeCommasFromNumber(calculatorDao.getFirstNumber());
+                String secondNumber = removeCommasFromNumber(calculatorDao.getSecondNumber());
                 String result;
                 String operand = calculatorDao.getOperator();
 
                 if (secondNumber == null) {
                     currentNumber = percentNumber(firstNumber);
                     firstNumber = currentNumber;
-                    calculatorDao.updateFirstNumber(formatNumberForExponentialNotation(firstNumber, true)); // FIXME
-                    calculatorDao.updateFormattedFirstNumber(formatNumber(firstNumber, true));
+
+                    calculatorDao.updateFirstNumber(formatNumber(firstNumber));
                     result = firstNumber;
                 } else {
                     currentNumber = percentNumber(secondNumber);
                     secondNumber = currentNumber;
-                    calculatorDao.updateSecondNumber(formatNumberForExponentialNotation(secondNumber, true));
-                    calculatorDao.updateFormattedSecondNumber(formatNumber(secondNumber, true));
+                    calculatorDao.updateSecondNumber(formatNumber(secondNumber));
                     result = calculateResult(firstNumber, secondNumber, operand);
                 }
 
-
-                calculatorDao.updateResult(formatNumberForExponentialNotation(result, false));
-                calculatorDao.updateFormattedResult(formatNumberForResult(result, true));
+                calculatorDao.updateResult(formatNumberForResult(result, true));
                 if (!result.equals("0") || secondNumber != null) {
                     listener.onShowResult(
-                            calculatorDao.getFormattedFirstNumber(),
-                            calculatorDao.getFormattedSecondNumber(),
+                            calculatorDao.getFirstNumber(),
+                            calculatorDao.getSecondNumber(),
                             calculatorDao.getOperator(),
-                            calculatorDao.getFormattedResult());
+                            calculatorDao.getResult());
                 } else {
-                    //calculatorDao//
                     calculatorDao.updateFirstNumber(null);
-                    calculatorDao.updateFormattedFirstNumber(null);
                     calculatorDao.updateResult(null);
-                    calculatorDao.updateFormattedResult(null);
                     calculatorDao.updateSecondNumber(null);
-                    calculatorDao.updateFormattedSecondNumber(null);
 
                     listener.onClear();
                 }
@@ -391,6 +355,9 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
         String result;
         BigDecimal bi1, bi2;
 
+        firstNumber = removeCommasFromNumber(firstNumber);
+        secondNumber = removeCommasFromNumber(secondNumber);
+
         try {
             bi1 = new BigDecimal(firstNumber);
         } catch (Exception e) {
@@ -424,6 +391,9 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
 
     private String formatNumberForResult(String resultNumber, boolean isExponentialDesired) {
         String formattedNumber;
+
+        resultNumber = removeCommasFromNumber(resultNumber);
+
         Locale.setDefault(Locale.US);
         if (resultNumber != null) {
 
@@ -481,14 +451,15 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
             return null;
     }
 
+    // Declared Useless As Of 3/9/21
     private String formatNumberForExponentialNotation(String number, boolean isFloatDesired) {
         Locale.setDefault(Locale.US);
         int length;
 
         if (isFloatDesired) {
-            length = LENGTH_FOR_CALCULATION_VIEW_WITH_COMMA;
+            length = LENGTH_LIMIT_FOR_DECIMALS;
         } else {
-            length = LENGTH_FOR_CALCULATION_VIEW_WITHOUT_COMMA;
+            length = LENGTH_LIMIT_FOR_INTEGERS;
         }
 
         if (number != null) {
@@ -505,19 +476,14 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
     }
 
     // Helper Method
-    private String formatNumber(String number, boolean isFloatDesired) {
-        // roundAfter - How long do we want number to be in order to show scientific number notation.
+    private String formatNumber(String number) {
+
         String formattedNumber;
+        number = removeCommasFromNumber(number);
         int length;
         Locale.setDefault(Locale.US);
 
-        if (isFloatDesired) {
-            // We need this so when we enter a big decimal number, it doesn't turn it to exponential notation.
-            // For Example 1.000000000000000000 to 1E0
-            length = LENGTH_FOR_CALCULATION_VIEW_WITH_COMMA;
-        } else {
-            length = LENGTH_FOR_CALCULATION_VIEW_WITHOUT_COMMA;
-        }
+        length = LENGTH_LIMIT_FOR_DECIMALS;
 
         if (number != null) {
             if (number.endsWith("-")) //
@@ -564,7 +530,6 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
         // We need this to manually set MinimumFractionDigits on @formatNumber method
         // In order to show the correct amount of zeros after the comma separator.
         // For example 0.00000002 -> Number of Fraction Digits = 7.
-
         String[] arrayOfNumbers = number.split("\\.");
 
         if (arrayOfNumbers.length > 1) {
@@ -592,5 +557,22 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
             else
                 return currentNumber + addedDigit;
         }
+    }
+
+    // Helper Method
+    private int getLengthOfNumberWithoutCommas(String number) {
+        number = removeCommasFromNumber(number);
+        return number.length();
+    }
+
+    // Helper Method
+    private int getLengthLimit(String number) {
+
+        number = removeCommasFromNumber(number);
+
+        if (number.contains("."))
+            return LENGTH_LIMIT_FOR_DECIMALS;
+        else
+            return LENGTH_LIMIT_FOR_INTEGERS;
     }
 }

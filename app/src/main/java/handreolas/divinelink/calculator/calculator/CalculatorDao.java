@@ -11,25 +11,16 @@ import androidx.room.Transaction;
 public abstract class CalculatorDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract void insertCalculation(CalculatorDomain calculatorDomain, CalculatorDomain formattedDomain);
+    abstract void insertCalculation(CalculatorDomain formattedDomain);
 
-    @Query("SELECT numberA From Calculations WHERE id = 0")
+    @Query("SELECT numberA From Calculations")
     public abstract String getFirstNumber();
 
-    @Query("SELECT numberB From Calculations WHERE id = 0")
+    @Query("SELECT numberB From Calculations")
     public abstract String getSecondNumber();
 
-    @Query("SELECT result From Calculations WHERE id = 0")
+    @Query("SELECT result From Calculations")
     public abstract String getResult();
-
-    @Query("SELECT numberA From Calculations WHERE id = 1")
-    public abstract String getFormattedFirstNumber();
-
-    @Query("SELECT numberB From Calculations WHERE id = 1")
-    public abstract String getFormattedSecondNumber();
-
-    @Query("SELECT result From Calculations WHERE id = 1")
-    public abstract String getFormattedResult();
 
 
     @Query("SELECT operation From Calculations")
@@ -38,25 +29,14 @@ public abstract class CalculatorDao {
     @Query("DELETE FROM Calculations")
     abstract void deleteAll();
 
-
-    @Query("UPDATE Calculations SET numberA = :firstNumber WHERE id = 0")
+    @Query("UPDATE Calculations SET numberA = :firstNumber")
     abstract void updateFirstNumber(String firstNumber);
 
-    @Query("UPDATE Calculations SET numberB = :secondNumber  WHERE id = 0")
+    @Query("UPDATE Calculations SET numberB = :secondNumber")
     abstract void updateSecondNumber(String secondNumber);
 
-    @Query("UPDATE Calculations SET result = :result WHERE  id = 0")
+    @Query("UPDATE Calculations SET result = :result")
     abstract void updateResult(String result);
-
-
-    @Query("UPDATE Calculations SET numberA = :firstNumber WHERE id = 1")
-    abstract void updateFormattedFirstNumber(String firstNumber);
-
-    @Query("UPDATE Calculations SET numberB = :secondNumber  WHERE id = 1")
-    abstract void updateFormattedSecondNumber(String secondNumber);
-
-    @Query("UPDATE Calculations SET result = :result WHERE  id = 1")
-    abstract void updateFormattedResult(String result);
 
 
     @Query("UPDATE Calculations SET operation = :operand")
@@ -66,15 +46,13 @@ public abstract class CalculatorDao {
     public void clearEntries() {
         deleteAll();
         insertCalculation(
-                new CalculatorDomain(0, null, null, null, null), // Non Formatted
-                new CalculatorDomain(1, null, null, null, null));  // Formatted
+                new CalculatorDomain(null, null, null, null));
     }
 
     @Transaction
-    public void updateCalculator(CalculatorDomain calculatorDomain, CalculatorDomain formattedDomain) {
+    public void updateCalculator(CalculatorDomain formattedDomain) {
         deleteAll();
-        insertCalculation(calculatorDomain, formattedDomain);
+        insertCalculation(formattedDomain);
     }
-
 
 }
