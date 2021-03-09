@@ -113,7 +113,9 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
     }
 
     @Override
-    public void onDivisionByZero() {
+    public void onDivisionByZero(String numberA, String numberB, String operand) {
+//        calculatorView.showResult(calculatorDomain.getNumberA() + calculatorDomain.getOperation() + calculatorDomain.getNumberB());
+        calculatorView.showResult(numberA + operand + numberB);
         calculatorView.showResultOnResultTV("Can't divide by zero");
     }
 }

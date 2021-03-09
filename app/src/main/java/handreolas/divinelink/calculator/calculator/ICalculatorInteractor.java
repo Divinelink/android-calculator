@@ -27,7 +27,7 @@ public interface ICalculatorInteractor {
 
         void onError(String error);
 
-        void onDivisionByZero();
+        void onDivisionByZero(String numberA, String numberB, String Operand);
 
         void onTooManyDigits();
 

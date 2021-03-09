@@ -28,6 +28,9 @@ public abstract class CalculatorDao {
     @Query("SELECT operation From Calculations WHERE id = 1")
     public abstract String getSavedOperand();
 
+    @Query("SELECT result From Calculations WHERE id = 1")
+    public abstract String getSavedResult();
+
     @Query("UPDATE Calculations SET numberA = :firstNumber WHERE id = 1")
     abstract void updateSavedFirstNumber(String firstNumber);
 
@@ -36,6 +39,8 @@ public abstract class CalculatorDao {
 
     @Query("UPDATE Calculations SET operation = :operand WHERE id = 1")
     abstract void updateSavedOperation(String operand);
+
+
 
     @Query("SELECT numberA From Calculations")
     public abstract String getFirstNumber();
@@ -67,8 +72,9 @@ public abstract class CalculatorDao {
     @Transaction
     public void clearEntries() {
         deleteAll();
-        insertCalculation(
-                new CalculatorDomain(null, null, null, null));
+        insertCalculation(new CalculatorDomain(0,null, null, null, null));
+        insertCalculation(new CalculatorDomain(1,null, null, null, null));
+
     }
 
     @Transaction
