@@ -128,7 +128,7 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
 
                 previousOperand = calculatorDao.getOperator();
 
-                if (result.equals("NaN")) {
+                if (result.equals("NaN") || result.equals("Can't divide by zero")) {
                     calculatorDao.updateFirstNumber(null);
                     calculatorDao.updateResult(null);
                     calculatorDao.updateSecondNumber(null);
@@ -398,7 +398,6 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                 result = String.valueOf(bi1.multiply(bi2));
                 break;
             case "÷":
-
                 result = String.valueOf(bi1.divide(bi2, 10, RoundingMode.CEILING));
                 break;
             default:
@@ -437,30 +436,23 @@ public class CalculatorInteractorImpl implements ICalculatorInteractor {
                     return new DecimalFormat("#.########E0").format(Double.parseDouble(resultNumber));
 
                 //TODO make this dynamic
-            } else if (getIntegerDigits(resultNumber) >= 9) {
-                return new DecimalFormat("###,###").format(Double.parseDouble(resultNumber));
-            } else if (getIntegerDigits(resultNumber) >= 8) {
-                return new DecimalFormat("###,###.#").format(Double.parseDouble(resultNumber));
-            } else if (getIntegerDigits(resultNumber) >= 7) {
-                return new DecimalFormat("###,###.##").format(Double.parseDouble(resultNumber));
-            } else if (getIntegerDigits(resultNumber) >= 6) {
-                return new DecimalFormat("###,###.###").format(Double.parseDouble(resultNumber));
-            } else if (getIntegerDigits(resultNumber) >= 5) {
-                return new DecimalFormat("###,###.####").format(Double.parseDouble(resultNumber));
-            } else if (getIntegerDigits(resultNumber) >= 4) {
-                return new DecimalFormat("###,###.#####").format(Double.parseDouble(resultNumber));
-            } else if (getIntegerDigits(resultNumber) >= 3) {
-                return new DecimalFormat("###,###.######").format(Double.parseDouble(resultNumber));
-            } else if (getIntegerDigits(resultNumber) >= 2) {
-                return new DecimalFormat("###,###.#######").format(Double.parseDouble(resultNumber));
-            } else if (getIntegerDigits(resultNumber) >= 1) {
-                return new DecimalFormat("###,###.########").format(Double.parseDouble(resultNumber));
+            } else if (getIntegerDigits(resultNumber) <= 9 && getIntegerDigits(resultNumber) >= 2) {
+                // The follow procedure correctly formats result's fraction digits.
+                // The larger the number, the less fraction digits we want to show.
+                // For example 1,000,000.006 has 7 integer digits, so we'll show 2 fraction digits.
+                // So it becomes 1,000,000.01 | 10,000,000.006 turns into 10,000,000.1 etc.
+                DecimalFormat formatter = new DecimalFormat("###,###");
+                formatter.setMaximumFractionDigits(9 - getIntegerDigits(resultNumber));
+                formatter.setMinimumIntegerDigits(getIntegerDigits(resultNumber)-1);
+                return formatter.format(Double.parseDouble(resultNumber));
+
             } else {
                 return new DecimalFormat("###,###.#####").format(Double.parseDouble(resultNumber));
             }
         } else {
             return null;
         }
+
     }
 
     // Helper Method
