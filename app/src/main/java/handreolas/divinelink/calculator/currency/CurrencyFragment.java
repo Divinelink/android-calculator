@@ -8,16 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import handreolas.divinelink.calculator.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CurrencyFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class CurrencyFragment extends Fragment implements ICurrencyView{
+public class CurrencyFragment extends Fragment implements ICurrencyView {
 
 
     private ICurrencyPresenter presenter;
@@ -25,33 +19,14 @@ public class CurrencyFragment extends Fragment implements ICurrencyView{
     private Button mOne, mTwo, mThree, mFour, mFive, mSix, mSeven, mEight, mNine, mZero, mComma;
     private Button mBackspace, mDelete;
 
-//    // TODO: Rename parameter arguments, choose names that match
-//    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-
-//    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
-
     public CurrencyFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-     * @return A new instance of fragment CurrencyFragment.
-     */
 
     public static CurrencyFragment newInstance() {
         CurrencyFragment fragment = new CurrencyFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,16 +34,50 @@ public class CurrencyFragment extends Fragment implements ICurrencyView{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_currency, container, false);
+        View v = inflater.inflate(R.layout.fragment_currency, container, false);
+
+        mOne = v.findViewById(R.id.buttonOne);
+        mTwo = v.findViewById(R.id.buttonTwo);
+        mThree = v.findViewById(R.id.buttonThree);
+        mFour = v.findViewById(R.id.buttonFour);
+        mFive = v.findViewById(R.id.buttonFive);
+        mSix = v.findViewById(R.id.buttonSix);
+        mSeven = v.findViewById(R.id.buttonSeven);
+        mEight = v.findViewById(R.id.buttonEight);
+        mNine = v.findViewById(R.id.buttonNine);
+        mZero = v.findViewById(R.id.buttonZero);
+        mComma = v.findViewById(R.id.buttonComma);
+
+        mDelete = v.findViewById(R.id.buttonAC);
+        mBackspace = v.findViewById(R.id.buttonBackspace);
+
+//        mOne.setOnClickListener(this::onClick);
+//        mTwo.setOnClickListener(this::onClick);
+//        mThree.setOnClickListener(this::onClick);
+//        mFour.setOnClickListener(this::onClick);
+//        mFive.setOnClickListener(this::onClick);
+//        mSix.setOnClickListener(this::onClick);
+//        mSeven.setOnClickListener(this::onClick);
+//        mEight.setOnClickListener(this::onClick);
+//        mNine.setOnClickListener(this::onClick);
+//        mZero.setOnClickListener(this::onClick);
+//        mDelete.setOnClickListener(this::onClick);
+//
+//        mComma.setOnClickListener(this::onClick);
+
+//        mBackspace.setOnClickListener(this::onClick);
+
+
+        presenter = new CurrencyPresenterImpl(this);
+
+        presenter.getCurrencyRatios(getContext());
+
+        return v;
     }
 }

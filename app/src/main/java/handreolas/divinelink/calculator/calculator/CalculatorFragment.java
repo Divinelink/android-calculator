@@ -34,34 +34,13 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
 
     private TextView mCalculationTV, mResultTV;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public CalculatorFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     * <p>
-     * //     * @param param1 Parameter 1.
-     * //     * @param param2 Parameter 2.
-     *
-     * @return A new instance of fragment CalculatorFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static CalculatorFragment newInstance() {
         CalculatorFragment fragment = new CalculatorFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,10 +48,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -80,7 +55,7 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_calculator, container, false);
-
+        //TODO division button is not centerd 10/3/21 - 5:44PM
         mOne = v.findViewById(R.id.buttonOne);
         mTwo = v.findViewById(R.id.buttonTwo);
         mThree = v.findViewById(R.id.buttonThree);
@@ -106,13 +81,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
 
         mCalculationTV = v.findViewById(R.id.calculationTextView);
         mResultTV = v.findViewById(R.id.resultTextView);
-
-//        mGuideLineResult = v.findViewById(R.id.horizontalCalculationTVGuideline);
-
-
-//        GetCalculatorFactory factory = new GetCalculatorFactory();
-//        factory.getNumber(5);
-//        factory.getOperation(5);
 
 
         mOne.setOnClickListener(this::onClick);
