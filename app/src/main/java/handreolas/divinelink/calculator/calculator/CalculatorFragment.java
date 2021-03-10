@@ -108,7 +108,7 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
         mCalculationTV = v.findViewById(R.id.calculationTextView);
         mResultTV = v.findViewById(R.id.resultTextView);
 
-        mGuideLineResult = v.findViewById(R.id.horizontalCalculationTVGuideline);
+//        mGuideLineResult = v.findViewById(R.id.horizontalCalculationTVGuideline);
 
 
 //        GetCalculatorFactory factory = new GetCalculatorFactory();
@@ -211,7 +211,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
 
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void run() {
                     mResultTV.setTextSize(mResultTV.getAutoSizeMaxTextSize());
@@ -221,14 +220,13 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                     mResultTV.setTextColor(getContext().getResources().getColor(android.R.color.tab_indicator_text));
                     mCalculationTV.setTextColor(getContext().getResources().getColor(android.R.color.black));
 
-                    mResultTV.setTextSize(35);
-                    mCalculationTV.setTextSize(40);
+                    mResultTV.setTextSize(getContext().getResources().getDimensionPixelSize(R.dimen.resultTextViewTextSize) / getResources().getDisplayMetrics().scaledDensity);
+                    mCalculationTV.setAutoSizeTextTypeUniformWithConfiguration(
+                            getContext().getResources().getDimensionPixelOffset(R.dimen.calculationMinTextSize),
+                            getContext().getResources().getDimensionPixelOffset(R.dimen.calculationMaxTextSize),
+                            getContext().getResources().getDimensionPixelOffset(R.dimen.calculationAutoSizeStepGranularity), 0);
 
 
-                    ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mGuideLineResult.getLayoutParams();
-                    params.guidePercent = 0.60f; // 45% // range: 0 <-> 1
-
-                    mGuideLineResult.setLayoutParams(params);
                 }
             });
         }
@@ -246,14 +244,13 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                     mResultTV.setTextColor(getContext().getResources().getColor(android.R.color.tab_indicator_text));
                     mCalculationTV.setTextColor(getContext().getResources().getColor(android.R.color.black));
 
-                    mResultTV.setTextSize(35);
-                    mCalculationTV.setTextSize(40);
+                    mResultTV.setTextSize(getContext().getResources().getDimensionPixelSize(R.dimen.resultTextViewTextSize) / getResources().getDisplayMetrics().scaledDensity);
+                    mCalculationTV.setAutoSizeTextTypeUniformWithConfiguration(
+                            getContext().getResources().getDimensionPixelOffset(R.dimen.calculationMinTextSize),
+                            getContext().getResources().getDimensionPixelOffset(R.dimen.calculationMaxTextSize),
+                            getContext().getResources().getDimensionPixelOffset(R.dimen.calculationAutoSizeStepGranularity), 0);
 
 
-                    ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mGuideLineResult.getLayoutParams();
-                    params.guidePercent = 0.8f;
-
-                    mGuideLineResult.setLayoutParams(params);
                 }
             });
         }
@@ -266,24 +263,18 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mGuideLineResult.getLayoutParams();
-                    params.guidePercent = 0.60f; // 60% // range: 0 <-> 1
-                    mGuideLineResult.setLayoutParams(params);
 
                     final TextView tv = mResultTV;
-//                    mCalculationTV.setText(result);
-//                    tv.setText(result);
+
                     mResultTV.setTextColor(getContext().getResources().getColor(android.R.color.black));
                     mCalculationTV.setTextColor(getContext().getResources().getColor(android.R.color.tab_indicator_text));
 
-                    final float startSize = mResultTV.getTextSize() /  getResources().getDisplayMetrics().scaledDensity; // Size in SP
-                    final float endSize = 80 / getResources().getDisplayMetrics().scaledDensity; // Temp Values, will make them dynamic
-
+                    final float startSize = mResultTV.getTextSize() / getResources().getDisplayMetrics().scaledDensity; // Size in SP
+                    final float endSize =  getContext().getResources().getDimensionPixelOffset(R.dimen.resultTextViewEnlarged) / getResources().getDisplayMetrics().scaledDensity;
                     long animationDuration = 200; // Animation duration in ms
 
                     ValueAnimator animator = ValueAnimator.ofFloat(startSize, endSize);
                     animator.setDuration(animationDuration);
-
                     animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -291,7 +282,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                             tv.setTextSize(animatedValue);
                         }
                     });
-
                     animator.start();
 
                 }

@@ -16,44 +16,55 @@
         android:layout_weight="0.5"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/calculationTextView"
+        <LinearLayout
+            android:id="@+id/calculationLayout"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center|end"
-            android:textColor="@color/black"
-            android:textSize="40sp"
-            app:autoSizeMaxTextSize="80sp"
-            app:autoSizeMinTextSize="10sp"
-            app:autoSizeStepGranularity="3sp"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toTopOf="@+id/resultTextView"
-            app:layout_constraintEnd_toStartOf="@+id/verticalEnd"
-            app:layout_constraintStart_toStartOf="@+id/verticalStart"
-            app:layout_constraintTop_toTopOf="@+id/horizontalCalculationTVGuideline"
-            tools:text="00000" />
-
-        <TextView
-            android:id="@+id/resultTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:gravity="center|end"
-            android:textSize="35sp"
-            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom|end"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/verticalEnd"
-            app:layout_constraintStart_toStartOf="@+id/verticalStart"
-            app:layout_constraintTop_toBottomOf="@+id/calculationTextView"
-            tools:text="Result" />
+            app:layout_constraintStart_toStartOf="@+id/verticalStart">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalCalculationTVGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="0.7"
+               android:layout_marginBottom="7dp"/>
+
+
+            <TextView
+                android:id="@+id/calculationTextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:layout_marginTop="7dp"
+                android:gravity="center|end"
+                android:textColor="@color/black"
+                app:autoSizeMaxTextSize="@dimen/calculationMaxTextSize"
+                app:autoSizeMinTextSize="@dimen/calculationMinTextSize"
+                app:autoSizeStepGranularity="@dimen/calculationAutoSizeStepGranularity"
+                app:autoSizeTextType="uniform"
+                tools:text="00000" />
+
+
+            <TextView
+                android:id="@+id/resultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center|end"
+                android:textSize="@dimen/resultTextViewTextSize"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/verticalEnd"
+                app:layout_constraintStart_toStartOf="@+id/verticalStart"
+                app:layout_constraintTop_toBottomOf="@+id/calculationTextView"
+                tools:text="Result" />
+
+        </LinearLayout>
+
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/verticalStart"
@@ -70,7 +81,6 @@
             app:layout_constraintGuide_percent="0.95" />
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Second Half of Screen - Takes the rest 0.6 percent of screen
@@ -84,6 +94,64 @@
         android:layout_weight="0.5"
         android:orientation="vertical">
 
+
+        <ImageButton
+            android:id="@+id/buttonBackspace"
+            style="@style/RoundCalculatorButtons"
+            android:src="@drawable/ic_backspace"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
+            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+            app:layout_constraintStart_toStartOf="@+id/verticalFirst"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalFirst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalSecond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalThird"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalFourth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalFirst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalSecond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/verticalThird"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonDivision"
@@ -135,15 +203,6 @@
             app:layout_constraintStart_toEndOf="@+id/verticalThird"
             app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
 
-        <ImageButton
-            android:id="@+id/buttonBackspace"
-            style="@style/RoundCalculatorButtons"
-            android:src="@drawable/ic_backspace"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
-            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
-            app:layout_constraintStart_toStartOf="@+id/verticalFirst"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonPercent"
             style="@style/RoundCalculatorButtons.Percentage"
@@ -153,55 +212,6 @@
             app:layout_constraintEnd_toStartOf="@+id/verticalThird"
             app:layout_constraintStart_toStartOf="@+id/verticalSecond"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalFirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.2" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalSecond"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.4" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.6" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalFourth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalFirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalSecond"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonAC"

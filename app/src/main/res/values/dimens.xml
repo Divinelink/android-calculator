@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="calculationMaxTextSize">60sp</dimen>
+    <dimen name="calculationMinTextSize">12sp</dimen>
+    <dimen name="calculationAutoSizeStepGranularity">2sp</dimen>
+    <dimen name="resultTextViewTextSize">35sp</dimen>
+    <dimen name="resultTextViewEnlarged">40sp</dimen>
+</resources>
