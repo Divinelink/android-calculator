@@ -33,7 +33,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
     private ImageButton mBackspace;
 
     private TextView mCalculationTV, mResultTV;
-    private Guideline mGuideLineResult;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

@@ -13,6 +13,8 @@
     <string name="_0">0</string>
     <string name="ac">AC</string>
     <string name="decimalSeparator">.</string>
+    <string name="calculator">Calculator</string>
+    <string name="currency">Currency</string>
 
 
 </resources>
