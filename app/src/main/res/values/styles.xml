@@ -2,7 +2,7 @@
 <resources>
 
 
-    <style name="RoundCalculatorButtons" parent="Widget.AppCompat.Button.Borderless" >
+    <style name="RoundCalculatorButtons" parent="Widget.AppCompat.Button.Borderless">
         <!-- Could use android:stateListAnimator="@null" but requires API level 21 or higher -->
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
@@ -11,7 +11,7 @@
         <item name="android:textSize">22sp</item>
     </style>
 
-    <style name="RoundCalculatorNumberButtons" parent="RoundCalculatorButtons" >
+    <style name="RoundCalculatorNumberButtons" parent="RoundCalculatorButtons">
         <!-- Could use android:stateListAnimator="@null" but requires API level 21 or higher -->
         <item name="android:textColor">@color/black</item>
     </style>
@@ -23,6 +23,50 @@
 
     <style name="RoundCalculatorButtons.Percentage" parent="RoundCalculatorButtons.Operations">
         <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="CurrencyCalculatorActionButtons" parent="RoundCalculatorButtons">
+        <item name="android:background">@drawable/currency_buttons_shape</item>
+        <item name="backgroundTint">@color/ColorCurrencyOperationButtons</item>
+        <item name="android:layout_margin">15dp</item>
+    </style>
+
+
+    <style name="CurrencyTextViewButtonLike">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginStart">25dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="CurrencyDropDownArrowStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="drawableEndCompat">@drawable/ic_baseline_arrow_drop_down</item>
+    </style>
+
+    <style name="CurrencyValueAndInfoLayoutStyle">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">25dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+    </style>
+
+    <style name="CurrencyValueTextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">end</item>
+    </style>
+
+    <style name="CurrencyCountryInfoStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:gravity">end</item>
     </style>
 
 
