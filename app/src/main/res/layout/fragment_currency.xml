@@ -5,17 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/fragment_currency"
     tools:context=".currency.CurrencyFragment">
 
 
-    <!-- First Half of Screen - Takes 0.4 percent of screen -->
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="0.4"
+
         android:layout_gravity="bottom"
-        android:layout_weight="0.35"
         android:orientation="vertical">
 
 
@@ -34,6 +35,7 @@
                 style="@style/CurrencyTextViewButtonLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="USD"
                 tools:text="USD" />
 
             <TextView style="@style/CurrencyDropDownArrowStyle" />
@@ -50,6 +52,7 @@
                     style="@style/CurrencyCountryInfoStyle"
                     tools:text="United States dollar" />
             </LinearLayout>
+
 
 
         </LinearLayout>
@@ -89,16 +92,16 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/currency_layout_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/currencyHorizontalThird"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/currencyHorizontalSecond">
+
 
             <TextView
                 android:id="@+id/currencyListButtonThird"
@@ -106,7 +109,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="AUS" />
-
             <TextView style="@style/CurrencyDropDownArrowStyle" />
 
             <LinearLayout style="@style/CurrencyValueAndInfoLayoutStyle">
@@ -125,210 +127,233 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Exchange rates are provided by Fixer.io\nConnect to the network to get the latest info."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/currencyHorizontalFirst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.33" />
+            app:layout_constraintGuide_percent="0.25" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/currencyHorizontalSecond"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.66" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/infoCurrencyTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        tools:text="Exchange rates are provided by fixio. Connect to the network to get the latest info." />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutButtons"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.65"
-        android:orientation="vertical">
-
+            app:layout_constraintGuide_percent="0.50" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalFirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalSecond"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.25" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horizontalFourth"
+            android:id="@+id/currencyHorizontalThird"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.75" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalFirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalSecond"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/verticalThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonAC"
-            style="@style/CurrencyCalculatorActionButtons"
-            android:text="@string/ac"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/verticalThird"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonBackspace"
-            style="@style/CurrencyCalculatorActionButtons"
-            app:icon="@drawable/ic_baseline_backspace"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/verticalThird"
-            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonZero"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
-            app:layout_constraintStart_toStartOf="@+id/verticalFirst"
-            app:layout_constraintTop_toTopOf="@+id/horizontalFourth" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonOne"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_1"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
-            app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonTwo"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_2"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
-            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
-            app:layout_constraintStart_toStartOf="@+id/verticalFirst"
-            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonThree"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_3"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
-            app:layout_constraintEnd_toStartOf="@+id/verticalThird"
-            app:layout_constraintStart_toEndOf="@+id/verticalSecond"
-            app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonFour"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_4"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
-            app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonFive"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_5"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
-            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
-            app:layout_constraintStart_toEndOf="@+id/verticalFirst"
-            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonSix"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_6"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
-            app:layout_constraintEnd_toStartOf="@+id/verticalThird"
-            app:layout_constraintStart_toEndOf="@+id/verticalSecond"
-            app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonSeven"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_7"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
-            app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonEight"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_8"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
-            app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
-            app:layout_constraintStart_toStartOf="@+id/verticalFirst"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonNine"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/_9"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
-            app:layout_constraintEnd_toStartOf="@+id/verticalThird"
-            app:layout_constraintStart_toStartOf="@+id/verticalSecond"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonComma"
-            style="@style/RoundCalculatorNumberButtons"
-            android:text="@string/decimalSeparator"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/verticalThird"
-            app:layout_constraintStart_toStartOf="@+id/verticalSecond"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+     <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutButtons"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.60"
+            android:orientation="vertical">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/horizontalFirst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/horizontalSecond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/horizontalThird"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/horizontalFourth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.75" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalFirst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalSecond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalThird"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.75" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonAC"
+                style="@style/CurrencyCalculatorActionButtons"
+                android:text="@string/ac"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/verticalThird"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonBackspace"
+                style="@style/CurrencyCalculatorActionButtons"
+                app:icon="@drawable/ic_baseline_backspace"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/verticalThird"
+                app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonZero"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+                app:layout_constraintStart_toStartOf="@+id/verticalFirst"
+                app:layout_constraintTop_toTopOf="@+id/horizontalFourth" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonOne"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_1"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
+                app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonTwo"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_2"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
+                app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+                app:layout_constraintStart_toStartOf="@+id/verticalFirst"
+                app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonThree"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_3"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalFourth"
+                app:layout_constraintEnd_toStartOf="@+id/verticalThird"
+                app:layout_constraintStart_toEndOf="@+id/verticalSecond"
+                app:layout_constraintTop_toTopOf="@+id/horizontalThird" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonFour"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_4"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+                app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonFive"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_5"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+                app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+                app:layout_constraintStart_toEndOf="@+id/verticalFirst"
+                app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSix"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_6"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalThird"
+                app:layout_constraintEnd_toStartOf="@+id/verticalThird"
+                app:layout_constraintStart_toEndOf="@+id/verticalSecond"
+                app:layout_constraintTop_toTopOf="@+id/horizontalSecond" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSeven"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_7"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
+                app:layout_constraintEnd_toStartOf="@+id/verticalFirst"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonEight"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_8"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
+                app:layout_constraintEnd_toStartOf="@+id/verticalSecond"
+                app:layout_constraintStart_toStartOf="@+id/verticalFirst"
+                app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonNine"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/_9"
+                app:layout_constraintBottom_toTopOf="@+id/horizontalSecond"
+                app:layout_constraintEnd_toStartOf="@+id/verticalThird"
+                app:layout_constraintStart_toStartOf="@+id/verticalSecond"
+                app:layout_constraintTop_toBottomOf="@+id/horizontalFirst" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonComma"
+                style="@style/RoundCalculatorNumberButtons"
+                android:text="@string/decimalSeparator"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/verticalThird"
+                app:layout_constraintStart_toStartOf="@+id/verticalSecond"
+                app:layout_constraintTop_toBottomOf="@+id/horizontalFourth" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    <!-- First Half of Screen - Takes 0.4 percent of screen -->
+
+
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/currencySelectorRoot"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/splitGuideline2"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        android:visibility="invisible"/>-->
 
 
 </LinearLayout>

@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 import handreolas.divinelink.calculator.R;
 import handreolas.divinelink.calculator.calculator.CalculatorFragment;
 import handreolas.divinelink.calculator.currency.CurrencyFragment;
+import handreolas.divinelink.calculator.currencySelector.CurrencySelectorFragment;
 
 import android.os.Bundle;
 
@@ -73,6 +74,16 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void addCurrencySelectorFragment(int position) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.homeRoot, CurrencySelectorFragment.newInstance(position))
+                .commit();
+    }
+
+
 
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
