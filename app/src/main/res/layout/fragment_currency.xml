@@ -8,14 +8,11 @@
     android:id="@+id/fragment_currency"
     tools:context=".currency.CurrencyFragment">
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.4"
-
         android:layout_gravity="bottom"
         android:orientation="vertical">
 

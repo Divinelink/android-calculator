@@ -22,6 +22,7 @@
     <string name="exchange_rates_text">Exchange rates are provided by Fixer.io\nConnect to the network to get the latest info.</string>
     <string name="exchange_rates_text_short">Exchange rates are provided by Fixer.io</string>
     <string name="updating_values">Updating Rates…</string>
+    <string name="xf7">÷</string>
 
 
 </resources>

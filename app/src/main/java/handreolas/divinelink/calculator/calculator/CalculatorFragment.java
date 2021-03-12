@@ -17,7 +17,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+
 import handreolas.divinelink.calculator.R;
+
+import static handreolas.divinelink.calculator.features.CalculatorHelper.ADDITION;
+import static handreolas.divinelink.calculator.features.CalculatorHelper.DIVISION;
+import static handreolas.divinelink.calculator.features.CalculatorHelper.MULTIPLICATION;
+import static handreolas.divinelink.calculator.features.CalculatorHelper.SUBTRACTION;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,8 +35,8 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
 
     private ICalculatorPresenter presenter;
 
-    private Button mOne, mTwo, mThree, mFour, mFive, mSix, mSeven, mEight, mNine, mZero, mDelete, mComma;
-    private Button mDivision, mMultiplication, mSubtraction, mAddition, mResult, mPercentage;
+    private MaterialButton mOne, mTwo, mThree, mFour, mFive, mSix, mSeven, mEight, mNine, mZero, mDelete, mComma;
+    private MaterialButton mDivision, mMultiplication, mSubtraction, mAddition, mResult, mPercentage;
     private ImageButton mBackspace;
 
     private TextView mCalculationTV, mResultTV;
@@ -140,13 +147,13 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
         } else if (v.getId() == R.id.buttonAC) {
             presenter.clearNumber(getContext());
         } else if (v.getId() == R.id.buttonAddition) {
-            presenter.setOperand(getContext(), "+");
+            presenter.setOperand(getContext(), ADDITION);
         } else if (v.getId() == R.id.buttonSubtraction) {
-            presenter.setOperand(getContext(), "-");
+            presenter.setOperand(getContext(), SUBTRACTION);
         } else if (v.getId() == R.id.buttonMultiplication) {
-            presenter.setOperand(getContext(), "×");
+            presenter.setOperand(getContext(), MULTIPLICATION);
         } else if (v.getId() == R.id.buttonDivision) {
-            presenter.setOperand(getContext(), "÷");
+            presenter.setOperand(getContext(), DIVISION);
         } else if (v.getId() == R.id.buttonComma) {
             presenter.setComma(getContext());
         } else if (v.getId() == R.id.buttonBackspace) {
@@ -216,8 +223,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                             getContext().getResources().getDimensionPixelOffset(R.dimen.calculationMinTextSize),
                             getContext().getResources().getDimensionPixelOffset(R.dimen.calculationMaxTextSize),
                             getContext().getResources().getDimensionPixelOffset(R.dimen.calculationAutoSizeStepGranularity), 0);
-
-
                 }
             });
         }
@@ -250,7 +255,6 @@ public class CalculatorFragment extends Fragment implements ICalculatorView {
                         }
                     });
                     animator.start();
-
                 }
             });
         }

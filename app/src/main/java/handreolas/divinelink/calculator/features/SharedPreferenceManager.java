@@ -25,11 +25,11 @@ public class SharedPreferenceManager {
         switch (position) {
             case 0:
                 KEY = FIRST_SYMBOL;
-                DEFAULT_VALUE = "USD";
+                DEFAULT_VALUE = "EUR";
                 break;
             case 1:
                 KEY = SECOND_SYMBOL;
-                DEFAULT_VALUE = "EUR";
+                DEFAULT_VALUE = "USD";
                 break;
             case 2:
                 KEY = THIRD_SYMBOL;
@@ -47,11 +47,11 @@ public class SharedPreferenceManager {
         switch (position) {
             case 0:
                 KEY = FIRST_NAME;
-                DEFAULT_VALUE = "United States dollar";
+                DEFAULT_VALUE = "Euro";
                 break;
             case 1:
                 KEY = SECOND_NAME;
-                DEFAULT_VALUE = "Euro";
+                DEFAULT_VALUE = "United States dollar";
                 break;
             case 2:
                 KEY = THIRD_NAME;

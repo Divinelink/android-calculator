@@ -47,7 +47,7 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
     @Override
     public void onShowResult(CalculatorDomain calculatorDomain) {
 
-        int lengthLimitOnCalculation = 25; //FIXME
+        int lengthLimitOnCalculation = 20; //FIXME
         String firstNumber = calculatorDomain.getNumberA();
         String secondNumber = calculatorDomain.getNumberB();
         String operand = calculatorDomain.getOperation();
@@ -62,7 +62,7 @@ public class CalculatorPresenterImpl implements ICalculatorPresenter, ICalculato
         } else {
             mLengthOfResult = firstNumber.length() + secondNumber.length() + operand.length();
             if (firstNumber.contains("E")) // If First Number is in exponential form, then @lengthLimitOnCaluclation becomes 23, so UI doesn't break.
-                lengthLimitOnCalculation = 23;
+                lengthLimitOnCalculation =19;
             if (mLengthOfResult >= lengthLimitOnCalculation) {
                 calculatorView.showResult(String.format("%s\n%s%s", firstNumber, operand, secondNumber));
             } else {

@@ -6,12 +6,20 @@ import android.content.Context;
 public interface ICurrencyPresenter {
 
 
-    void getCurrencyRatios(Context ctx);
+    void getCurrencySymbols(Context ctx);
 
-    void calculateRates(int position, long value, Context ctx);
+    void getCurrencySelectorFragment(Context ctx, int position);
 
-    void getCurrencyList(int position, Context ctx);
+    void getCurrencyRates(Context ctx, boolean refresh);
 
+    void calculateRates(String value, Context ctx);
 
+    void insertNumber(String value, String insertedNumber, Context ctx);
+
+    void insertComma(Context ctx, String currentValue);
+
+    void backspace(Context ctx, String currentValue);
+
+    void clearValues(Context ctx);
 
 }

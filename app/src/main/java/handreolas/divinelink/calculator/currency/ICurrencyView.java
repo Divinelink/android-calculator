@@ -1,18 +1,19 @@
 package handreolas.divinelink.calculator.currency;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public interface ICurrencyView {
-
-    void showSymbols(String a, String b, String c);
-
-    void showCurrencyList(ArrayList<SymbolsDomain> currencySymbols, int position);
 
     void updateTime(String date);
 
     void updateTimeBeforeCall(String updating);
 
-    void updateCurrencyRates(Double r1, Double r2, Double r3);
+    void updateCurrencyRates(String r1, String r2, String r3);
+
+    void addCommaOnCurrentRate(String r1, int position);
+
+    void addCurrencySelectorFragment(int position);
+
+    void onError(int errorCode);
 
 }

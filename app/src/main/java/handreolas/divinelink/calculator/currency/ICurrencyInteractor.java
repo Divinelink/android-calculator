@@ -4,40 +4,60 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
-import handreolas.divinelink.calculator.calculator.ICalculatorInteractor;
+import androidx.core.content.ContextCompat;
 
 public interface ICurrencyInteractor {
 
-    void setNumber(OnGetCurrencyResultListener listener, Context ctx, String number);
+    void insertNumber(OnGetCurrencyResultListener listener, Context ctx, String insertedNumber, String currencyValue);
+
+    void insertComma(OnGetCurrencyResultListener listener, Context ctx, String currencyValue);
 
     void onTextViewClick(OnGetCurrencyResultListener listener, Context ctx, int position);
 
-    void calculateRates(OnGetCurrencyResultListener listener, Context ctx, int position);
+    void calculateRates(OnGetCurrencyResultListener listener, Context ctx, String currentValue);
 
     void getSymbols(OnGetCurrencyResultListener listener, Context ctx);
 
-    void getRates(OnGetCurrencyResultListener listener, Context ctx);
+    void getRates(OnGetCurrencyResultListener listener, Context ctx, boolean refresh);
+
+    void clearValues(OnGetCurrencyResultListener listener, Context ctx);
+
+    void backspace(OnGetCurrencyResultListener listener, Context ctx, String currentValue);
+
+    void getSymbolSelectorFragment(OnGetCurrencyResultListener listener, Context ctx, int position);
 
     interface OnGetCurrencyResultListener {
 
         void onShowResult(String currencyOne, String currencyTwo, String currencyThree);
 
-        void onShowSymbols(ArrayList<SymbolsDomain> symbols, int position);
+        void onShowSymbols(ArrayList<CurrencyDomain> symbols, int position);
 
         void onUpdateTime(Long date);
 
-        void onUpdateCurrencyRates(ArrayList<Double> rates, int selectedPosition);
+        void onUpdateCurrencyRates(ArrayList<String> rates, int selectedPosition);
 
         void onBeforeUpdateTime(String updating);
 
-        void onShowSymbols(ArrayList<SymbolsDomain> symbols);
+        void onShowSymbols(ArrayList<CurrencyDomain> symbols);
+
+        void onAddSingleCharOnCurrentRate(String currentRate, int position);
+
+        void onAddSelectorFragment(int position);
 
         void onClear();
 
-        void onTooManyDigits();
+        void doNothing();
 
-        void onError();
+        void onError(Context ctx, int errorCode);
 
     }
+
+    interface OnGetCurrencySelectorResultListener {
+
+        void onShowSymbols(ArrayList<CurrencyDomain> symbols, int position);
+
+    }
+
+
 
 }

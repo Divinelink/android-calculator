@@ -9,11 +9,9 @@ import retrofit2.http.GET;
 
 public interface RestAPI {
 
-    @GET("latest?access_key=")
     Call<CurrencyRateModel> fetchLatestRates();
 
 
-    @GET("symbols?access_key=")
     Call<CurrencySymbolsModel> fetchSymbols();
 
 }

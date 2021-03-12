@@ -19,6 +19,8 @@
     <style name="RoundCalculatorButtons.Operations" parent="RoundCalculatorButtons">
         <item name="android:textSize">35sp</item>
         <item name="android:includeFontPadding">false</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
     </style>
 
     <style name="RoundCalculatorButtons.Percentage" parent="RoundCalculatorButtons.Operations">

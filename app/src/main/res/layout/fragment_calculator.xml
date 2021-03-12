@@ -156,7 +156,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonDivision"
             style="@style/RoundCalculatorButtons.Operations"
-            android:text="&#xf7;"
+            android:scaleType="centerInside"
+            android:text="@string/xf7"
             app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/verticalThird"
@@ -207,6 +208,7 @@
             android:id="@+id/buttonPercent"
             style="@style/RoundCalculatorButtons.Percentage"
             android:text="&#xFF05;"
+            android:scaleType="centerInside"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/horizontalFirst"
             app:layout_constraintEnd_toStartOf="@+id/verticalThird"

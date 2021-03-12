@@ -6,10 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import handreolas.divinelink.calculator.features.CalculatorHelper;
+
 public class CurrencyPresenterImpl implements ICurrencyPresenter, ICurrencyInteractor.OnGetCurrencyResultListener {
 
     private final ICurrencyInteractor interactor;
     private final ICurrencyView currencyView;
+    private final CalculatorHelper calculatorHelper = new CalculatorHelper();
 
     public CurrencyPresenterImpl(ICurrencyView currencyView) {
         this.currencyView = currencyView;
@@ -17,11 +20,20 @@ public class CurrencyPresenterImpl implements ICurrencyPresenter, ICurrencyInter
     }
 
 
+    @Override
+    public void getCurrencySymbols(Context ctx) {
+        interactor.getSymbols(this, ctx);
+
+    }
 
     @Override
-    public void getCurrencyRatios(Context ctx) {
-        interactor.getSymbols(this, ctx);
-        interactor.getRates(this, ctx);
+    public void getCurrencySelectorFragment(Context ctx, int position) {
+        interactor.getSymbolSelectorFragment(this, ctx, position);
+    }
+
+    @Override
+    public void getCurrencyRates(Context ctx, boolean refresh) {
+        interactor.getRates(this, ctx, refresh);
     }
 
     @Override
@@ -31,23 +43,23 @@ public class CurrencyPresenterImpl implements ICurrencyPresenter, ICurrencyInter
 
     @Override
     public void onClear() {
+        currencyView.updateCurrencyRates("0", "0", "0");
+    }
+
+    @Override
+    public void doNothing() {
 
     }
 
     @Override
-    public void onTooManyDigits() {
-
-    }
-
-    @Override
-    public void onError() {
-
+    public void onError(Context ctx, int errorCode) {
+        currencyView.onError(errorCode);
     }
 
     @Override
     public void onUpdateTime(Long timestamp) {
 
-        String currentDate = String.format("%s", new SimpleDateFormat("dd MMMM yyyy HH:mm").format(new Date(timestamp*1000)));
+        String currentDate = String.format("%s", new SimpleDateFormat("dd MMMM yyyy HH:mm").format(new Date(timestamp * 1000)));
         currencyView.updateTime(currentDate);
 
     }
@@ -57,32 +69,60 @@ public class CurrencyPresenterImpl implements ICurrencyPresenter, ICurrencyInter
         currencyView.updateTimeBeforeCall(updating);
     }
 
-    @Override
-    public void getCurrencyList(int position, Context ctx) {
-
-    }
 
     @Override
-    public void onShowSymbols(ArrayList<SymbolsDomain> symbols, int position) {
-        currencyView.showCurrencyList(symbols, position);
+    public void onShowSymbols(ArrayList<CurrencyDomain> symbols, int position) {
+
     }
 
 
     @Override
-    public void onShowSymbols(ArrayList<SymbolsDomain> symbols) {
+    public void onShowSymbols(ArrayList<CurrencyDomain> symbols) {
 
     }
+
     @Override
-    public void onUpdateCurrencyRates(ArrayList<Double> rates, int selectedPosition)  {
+    public void onUpdateCurrencyRates(ArrayList<String> rates, int selectedPosition) {
+
         currencyView.updateCurrencyRates(
-                rates.get(0) / rates.get(selectedPosition),
-                rates.get(1) / rates.get(selectedPosition),
-                rates.get(2) / rates.get(selectedPosition));
+                calculatorHelper.formatCurrencyNumber(rates.get(0),  selectedPosition != 0),
+                calculatorHelper.formatCurrencyNumber(rates.get(1),  selectedPosition != 1),
+                calculatorHelper.formatCurrencyNumber(rates.get(2), selectedPosition != 2));
+
     }
 
+    @Override
+    public void insertNumber(String value, String insertedNumber, Context ctx) {
+        interactor.insertNumber(this, ctx, insertedNumber, value);
+    }
 
     @Override
-    public void calculateRates(int position, long value, Context ctx) {
-        interactor.calculateRates(this, ctx, position);
+    public void clearValues(Context ctx) {
+        interactor.clearValues(this, ctx);
+    }
+
+    @Override
+    public void calculateRates(String value, Context ctx) {
+        interactor.calculateRates(this, ctx, value);
+    }
+
+    @Override
+    public void insertComma(Context ctx, String currencyValue) {
+        interactor.insertComma(this, ctx, currencyValue);
+    }
+
+    @Override
+    public void onAddSingleCharOnCurrentRate(String currentRate, int position) {
+        currencyView.addCommaOnCurrentRate(calculatorHelper.formatCurrencyNumber(currentRate, false), position);
+    }
+
+    @Override
+    public void backspace(Context ctx, String currentValue) {
+        interactor.backspace(this, ctx, currentValue);
+    }
+
+    @Override
+    public void onAddSelectorFragment(int position) {
+        currencyView.addCurrencySelectorFragment(position);
     }
 }

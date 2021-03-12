@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import handreolas.divinelink.calculator.R;
 import handreolas.divinelink.calculator.currency.CurrencyFragment;
-import handreolas.divinelink.calculator.currency.SymbolsDomain;
+import handreolas.divinelink.calculator.currency.CurrencyDomain;
 import handreolas.divinelink.calculator.features.SharedPreferenceManager;
 
 
@@ -88,12 +88,12 @@ public class CurrencySelectorFragment extends Fragment implements ICurrencySelec
 
 
     @Override
-    public void showCurrencyListOnSelector(ArrayList<SymbolsDomain> currencySymbols, int position) {
+    public void showCurrencyListOnSelector(ArrayList<CurrencyDomain> currencySymbols, int position) {
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 final CurrencySelectorRvAdapter currencySelectorRvAdapter = new CurrencySelectorRvAdapter(currencySymbols, new OnCurrencySelectorClickListener() {
                     @Override
-                    public void onCurrencyClickListener(SymbolsDomain selectedCurrency) {
+                    public void onCurrencyClickListener(CurrencyDomain selectedCurrency) {
                         // Save Data on Shared Pref
                         preferenceManager.saveCurrencyName(selectedCurrency.getDescription(), position, getActivity());
                         preferenceManager.saveCurrencySymbol(selectedCurrency.getSymbol(), position, getActivity());

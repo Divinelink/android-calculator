@@ -10,12 +10,10 @@ import androidx.room.TypeConverters;
 import handreolas.divinelink.calculator.calculator.CalculatorDao;
 import handreolas.divinelink.calculator.calculator.CalculatorDomain;
 import handreolas.divinelink.calculator.currency.CurrencyDao;
-import handreolas.divinelink.calculator.currency.CurrencyRateModel;
-import handreolas.divinelink.calculator.currency.CurrencySymbolsModel;
-import handreolas.divinelink.calculator.currency.SymbolsDomain;
+import handreolas.divinelink.calculator.currency.CurrencyDomain;
 import handreolas.divinelink.calculator.features.Converters;
 
-@Database(entities = {CalculatorDomain.class,  SymbolsDomain.class}, version = 9, exportSchema = false)
+@Database(entities = {CalculatorDomain.class,  CurrencyDomain.class}, version = 10, exportSchema = false)
 @TypeConverters(Converters.class)
 abstract public class HomeDatabase extends RoomDatabase {
 

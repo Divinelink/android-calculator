@@ -5,8 +5,9 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "Symbols")
-public class SymbolsDomain {
+@Entity(tableName = "Currencies")
+public class CurrencyDomain {
+
 
     @PrimaryKey
     @NonNull
@@ -17,20 +18,20 @@ public class SymbolsDomain {
     private Double rate;
 
 
-    public SymbolsDomain(@NonNull String symbol, String description, Double rate) {
+    public CurrencyDomain(@NonNull String symbol, String description, Double rate) {
         this.symbol = symbol;
         this.description = description;
         this.rate = rate;
     }
 
     @Ignore
-    public SymbolsDomain(@NonNull String symbol, String description) {
+    public CurrencyDomain(@NonNull String symbol, String description) {
         this.symbol = symbol;
         this.description = description;
     }
 
     @Ignore
-    public SymbolsDomain(@NonNull String symbol, Double rate) {
+    public CurrencyDomain(@NonNull String symbol, Double rate) {
         this.symbol = symbol;
         this.rate = rate;
     }
@@ -43,6 +44,7 @@ public class SymbolsDomain {
         this.rate = rate;
     }
 
+    @NonNull
     public String getSymbol() {
         return symbol;
     }
@@ -50,6 +52,7 @@ public class SymbolsDomain {
     public void setSymbol(String symbol) {
         symbol = symbol;
     }
+
 
     public String getDescription() {
         return description;

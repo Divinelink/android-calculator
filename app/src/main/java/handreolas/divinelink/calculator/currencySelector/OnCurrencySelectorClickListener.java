@@ -1,9 +1,9 @@
 package handreolas.divinelink.calculator.currencySelector;
 
-import handreolas.divinelink.calculator.currency.SymbolsDomain;
+import handreolas.divinelink.calculator.currency.CurrencyDomain;
 
 public interface OnCurrencySelectorClickListener {
 
-    void onCurrencyClickListener(SymbolsDomain selectedCurrency);
+    void onCurrencyClickListener(CurrencyDomain selectedCurrency);
 
 }

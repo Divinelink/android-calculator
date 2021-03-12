@@ -1,25 +1,28 @@
 package handreolas.divinelink.calculator.currency;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import handreolas.divinelink.calculator.R;
-import handreolas.divinelink.calculator.base.HomeView;
 import handreolas.divinelink.calculator.currencySelector.CurrencySelectorFragment;
 import handreolas.divinelink.calculator.features.SharedPreferenceManager;
 
@@ -34,7 +37,9 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
 
     private TextView listFirstTV, listSecondTV, listThirdTV, valueFirstTV, valueSecondTV, valueThirdTV, infoFirstTV, infoSecondTV, infoThirdTV, exchangeRatesTV;
 
-    private SharedPreferenceManager sharedPreferenceManager;
+    private final SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager();
+    private int positionOfSelectedCurrency;
+
 
     public CurrencyFragment() {
         // Required empty public constructor
@@ -53,13 +58,14 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
         super.onCreate(savedInstanceState);
     }
 
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_currency, container, false);
 
-        sharedPreferenceManager = new SharedPreferenceManager();
 
         mOne = v.findViewById(R.id.buttonOne);
         mTwo = v.findViewById(R.id.buttonTwo);
@@ -98,21 +104,19 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
         infoThirdTV.setText(sharedPreferenceManager.getSavedCurrencyName(2, getContext()));
 
 
-//        mOne.setOnClickListener(this::onClick);
-//        mTwo.setOnClickListener(this::onClick);
-//        mThree.setOnClickListener(this::onClick);
-//        mFour.setOnClickListener(this::onClick);
-//        mFive.setOnClickListener(this::onClick);
-//        mSix.setOnClickListener(this::onClick);
-//        mSeven.setOnClickListener(this::onClick);
-//        mEight.setOnClickListener(this::onClick);
-//        mNine.setOnClickListener(this::onClick);
-//        mZero.setOnClickListener(this::onClick);
-//        mDelete.setOnClickListener(this::onClick);
-//
-//        mComma.setOnClickListener(this::onClick);
-
-//        mBackspace.setOnClickListener(this::onClick);
+        mOne.setOnClickListener(this::onClick);
+        mTwo.setOnClickListener(this::onClick);
+        mThree.setOnClickListener(this::onClick);
+        mFour.setOnClickListener(this::onClick);
+        mFive.setOnClickListener(this::onClick);
+        mSix.setOnClickListener(this::onClick);
+        mSeven.setOnClickListener(this::onClick);
+        mEight.setOnClickListener(this::onClick);
+        mNine.setOnClickListener(this::onClick);
+        mZero.setOnClickListener(this::onClick);
+        mDelete.setOnClickListener(this::onClick);
+        mComma.setOnClickListener(this::onClick);
+        mBackspace.setOnClickListener(this::onClick);
 
         listFirstTV.setOnClickListener(this::onClick);
         listSecondTV.setOnClickListener(this::onClick);
@@ -122,115 +126,118 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
         valueSecondTV.setOnClickListener(this::onClick);
         valueThirdTV.setOnClickListener(this::onClick);
 
-        mZero.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.getCurrencyRatios(getContext());
-            }
-        });
-
-
         presenter = new CurrencyPresenterImpl(this);
 
-        presenter.getCurrencyRatios(getContext());
+        mDelete.setOnTouchListener(touchListener);
+        mBackspace.setOnTouchListener(touchListener);
+
+
+
+        getFocusedCurrency();
+
+        presenter.getCurrencySymbols(getContext());
+        presenter.getCurrencyRates(getContext(), true);
+        presenter.calculateRates(getValueOfFocusedCurrency(), getContext());
 
         return v;
     }
 
-    public void onClick(View v) {
 
+    public void onClick(View v) {
         if (v.getId() == R.id.currencyListButtonFirst) {
-//            presenter.getCurrencyList(0, getContext());
-            addCurrencySelectorFragment(0);
+            presenter.getCurrencySelectorFragment(getContext(), 0);
+//            addCurrencySelectorFragment(0);
         } else if (v.getId() == R.id.currencyListButtonSecond) {
-//            presenter.getCurrencyList(1, getContext());
-            addCurrencySelectorFragment(1);
+            presenter.getCurrencySelectorFragment(getContext(), 1);
+//            addCurrencySelectorFragment(1);
         } else if (v.getId() == R.id.currencyListButtonThird) {
-//            presenter.getCurrencyList(2, getContext());
-            addCurrencySelectorFragment(2);
+            presenter.getCurrencySelectorFragment(getContext(), 2);
+//            addCurrencySelectorFragment(2);
         } else if (v.getId() == R.id.currencyValueTVFirst) {
             sharedPreferenceManager.saveSelectedPosition(0, getContext());
             valueFirstTV.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryVariant));
             valueSecondTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             valueThirdTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-            presenter.calculateRates(0, 1, getContext());
-
+            presenter.calculateRates("1", getContext());
         } else if (v.getId() == R.id.currencyValueTVSecond) {
             sharedPreferenceManager.saveSelectedPosition(1, getContext());
             valueFirstTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             valueSecondTV.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryVariant));
             valueThirdTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-            presenter.calculateRates(1, 1, getContext());
+            presenter.calculateRates("1", getContext());
         } else if (v.getId() == R.id.currencyValueTVThird) {
             sharedPreferenceManager.saveSelectedPosition(2, getContext());
             valueFirstTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             valueSecondTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             valueThirdTV.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryVariant));
-            presenter.calculateRates(2, 1, getContext());
+            presenter.calculateRates("1", getContext());
+        } else if (v.getId() == R.id.buttonOne) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "1", getContext());
+        } else if (v.getId() == R.id.buttonTwo) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "2", getContext());
+        } else if (v.getId() == R.id.buttonThree) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "3", getContext());
+        } else if (v.getId() == R.id.buttonFour) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "4", getContext());
+        } else if (v.getId() == R.id.buttonFive) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "5", getContext());
+        } else if (v.getId() == R.id.buttonSix) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "6", getContext());
+        } else if (v.getId() == R.id.buttonSeven) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "7", getContext());
+        } else if (v.getId() == R.id.buttonEight) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "8", getContext());
+        } else if (v.getId() == R.id.buttonNine) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "9", getContext());
+        } else if (v.getId() == R.id.buttonZero) {
+            presenter.insertNumber(getValueOfFocusedCurrency(), "0", getContext());
+        } else if (v.getId() == R.id.buttonComma) {
+            presenter.insertComma(getContext(), getValueOfFocusedCurrency());
+        } else if (v.getId() == R.id.buttonBackspace) {
+            presenter.backspace(getContext(), getValueOfFocusedCurrency());
+        } else if (v.getId() == R.id.buttonAC) {
+            presenter.clearValues(getContext());
         }
-
-//        if (v.getId() == R.id.buttonOne) {
-//            presenter.setNumber(getContext(), "1");
-//        } else if (v.getId() == R.id.buttonTwo) {
-//            presenter.setNumber(getContext(), "2");
-//        } else if (v.getId() == R.id.buttonThree) {
-//            presenter.setNumber(getContext(), "3");
-//        } else if (v.getId() == R.id.buttonFour) {
-//            presenter.setNumber(getContext(), "4");
-//        } else if (v.getId() == R.id.buttonFive) {
-//            presenter.setNumber(getContext(), "5");
-//        } else if (v.getId() == R.id.buttonSix) {
-//            presenter.setNumber(getContext(), "6");
-//        } else if (v.getId() == R.id.buttonSeven) {
-//            presenter.setNumber(getContext(), "7");
-//        } else if (v.getId() == R.id.buttonEight) {
-//            presenter.setNumber(getContext(), "8");
-//        } else if (v.getId() == R.id.buttonNine) {
-//            presenter.setNumber(getContext(), "9");
-//        } else if (v.getId() == R.id.buttonZero) {
-//            presenter.setNumber(getContext(), "0");
-//        } else if (v.getId() == R.id.buttonAC) {
-//            presenter.clearNumber(getContext());
-//        } else if (v.getId() == R.id.buttonAddition) {
-//            presenter.setOperand(getContext(), "+");
-//        } else if (v.getId() == R.id.buttonSubtraction) {
-//            presenter.setOperand(getContext(), "-");
-//        } else if (v.getId() == R.id.buttonMultiplication) {
-//            presenter.setOperand(getContext(), "×");
-//        } else if (v.getId() == R.id.buttonDivision) {
-//            presenter.setOperand(getContext(), "÷");
-//        } else if (v.getId() == R.id.buttonComma) {
-//            presenter.setComma(getContext());
-//        } else if (v.getId() == R.id.buttonBackspace) {
-//            presenter.backspace(getContext());
-//        } else if (v.getId() == R.id.buttonResult) {
-//            presenter.result(getContext());
-//        } else if (v.getId() == R.id.buttonPercent) {
-//            presenter.percentage(getContext());
-//        }
-
     }
+
+
+    private void getFocusedCurrency() {
+        positionOfSelectedCurrency = sharedPreferenceManager.getSelectedPosition(getContext());
+        if (positionOfSelectedCurrency == 0) {
+            valueFirstTV.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryVariant));
+            valueSecondTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            valueThirdTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+
+        } else if (positionOfSelectedCurrency == 1) {
+            valueFirstTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            valueSecondTV.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryVariant));
+            valueThirdTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+
+        } else {
+            valueFirstTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            valueSecondTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            valueThirdTV.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryVariant));
+        }
+    }
+
+    private String getValueOfFocusedCurrency() {
+        positionOfSelectedCurrency = sharedPreferenceManager.getSelectedPosition(getContext());
+        String value;
+        if (positionOfSelectedCurrency == 0)
+            value = valueFirstTV.getText().toString();
+        else if (positionOfSelectedCurrency == 1)
+            value = valueSecondTV.getText().toString();
+        else
+            value = valueThirdTV.getText().toString();
+
+        if (value.equals(""))
+            return "1";
+        else return value;
+    }
+
 
     @Override
-    public void showSymbols(String a, String b, String c) {
-
-    }
-
-    @Override
-    public void showCurrencyList(ArrayList<SymbolsDomain> currencySymbols, int position) {
-
-
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(() -> {
-
-            });
-        }
-
-    }
-
-
     public void addCurrencySelectorFragment(int position) {
-
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_currency, CurrencySelectorFragment.newInstance(position))
@@ -257,12 +264,79 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
                 getResources().getString(R.string.exchange_rates_text_short).length(),
                 text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         exchangeRatesTV.setText(spannable, TextView.BufferType.SPANNABLE);
+        timerHandler.postDelayed(failedToGetRatesRunnable, 0);
+    }
+
+    Handler timerHandler = new Handler();
+    Runnable failedToGetRatesRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (checkNetworkStatus(getContext()).equals("WiFi") || checkNetworkStatus(getContext()).equals("MobileData")) {
+                presenter.getCurrencyRates(getContext(), true);
+                presenter.getCurrencySymbols(getContext());
+                timerHandler.removeCallbacks(failedToGetRatesRunnable);
+            } else {
+                timerHandler.postDelayed(this, 5000);
+            }
+        }
+    };
+
+    public static String checkNetworkStatus(final Context context) {
+        String networkStatus = "";
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final android.net.NetworkInfo WiFi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        final android.net.NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (WiFi.isConnected()) {
+            networkStatus = "WiFi";
+        } else if (mobile.isConnected()) {
+            networkStatus = "MobileData";
+        } else {
+            networkStatus = "noNetwork";
+        }
+        return networkStatus;
+    }
+
+
+    @Override
+    public void updateCurrencyRates(String r1, String r2, String r3) {
+        valueFirstTV.setText(r1);
+        valueSecondTV.setText(r2);
+        valueThirdTV.setText(r3);
+
+        timerHandler.removeCallbacks(failedToGetRatesRunnable);
     }
 
     @Override
-    public void updateCurrencyRates(Double r1, Double r2, Double r3) {
-        valueFirstTV.setText(r1.toString());
-        valueSecondTV.setText(r2.toString());
-        valueThirdTV.setText(r3.toString());
+    public void addCommaOnCurrentRate(String r1, int position) {
+        if (position == 0) valueFirstTV.setText(r1);
+        else if (position == 1) valueSecondTV.setText(r1);
+        else valueThirdTV.setText(r1);
+    }
+
+    @Override
+    public void onError(int errorCode) {
+
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                if (errorCode == 1)
+                    Toast.makeText(getContext(), "Cannot get currency symbols.\nConnect to a network", Toast.LENGTH_LONG).show();
+                else if (errorCode == 2)
+                    Toast.makeText(getContext(), "Connect to a network to get rates", Toast.LENGTH_LONG).show();
+            });
+        }
+    }
+
+    View.OnTouchListener touchListener = this::onTouch;
+    private boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            AnimatorSet reducer = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.reduce_size);
+            reducer.setTarget(view);
+            reducer.start();
+        } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            AnimatorSet regainer = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.regain_size);
+            regainer.setTarget(view);
+            regainer.start();
+        }
+        return false;
     }
 }

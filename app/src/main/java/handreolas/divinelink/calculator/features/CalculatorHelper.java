@@ -12,6 +12,12 @@ public class CalculatorHelper {
     private final static String NAN = "NaN";
     private final static String DIVISION_BY_ZERO = "Can't divide by zero";
 
+    public final static String ADDITION = "+";
+    public final static String SUBTRACTION = "-";
+    public final static String MULTIPLICATION = "×";
+    public final static String DIVISION = "÷";
+
+
     public String percentNumber(String number) {
         String result;
         BigDecimal bi1;
@@ -41,7 +47,6 @@ public class CalculatorHelper {
             return null;
     }
 
-
     public String calculateResult(String firstNumber, String secondNumber, String operand) {
         String result;
         BigDecimal bi1, bi2;
@@ -59,29 +64,60 @@ public class CalculatorHelper {
         } catch (Exception e) {
             return NAN;
         }
-        if (operand.equals("÷")) {
+        if (operand.equals(DIVISION)) {
             if (Double.parseDouble(secondNumber) == 0)
                 return DIVISION_BY_ZERO;
         }
 
         switch (operand) {
-            case "+":
+            case ADDITION:
                 result = String.valueOf(bi1.add(bi2));
                 break;
-            case "-":
+            case SUBTRACTION:
                 result = String.valueOf(bi1.subtract(bi2));
                 break;
-            case "×":
+            case MULTIPLICATION:
                 result = String.valueOf(bi1.multiply(bi2));
                 break;
-            case "÷":
+            case DIVISION:
                 result = String.valueOf(bi1.divide(bi2, 10, RoundingMode.CEILING));
                 break;
             default:
                 result = String.valueOf(firstNumber);
         }
 
-        return new DecimalFormat("0.#######").format(Double.parseDouble(result)); // Remove trailing zeroes from result
+        return new DecimalFormat("###,###.#######").format(Double.parseDouble(result)); // Remove trailing zeroes from result
+    }
+
+    public String calculateCurrencies(String firstNumber, String secondNumber, String operand) {
+        String result;
+        BigDecimal bi1, bi2;
+
+        firstNumber = removeCommasFromNumber(firstNumber);
+        secondNumber = removeCommasFromNumber(secondNumber);
+
+        try {
+            bi1 = new BigDecimal(firstNumber);
+        } catch (Exception e) {
+            return NAN;
+        }
+        try {
+            bi2 = new BigDecimal(secondNumber);
+        } catch (Exception e) {
+            return NAN;
+        }
+
+        switch (operand) {
+            case MULTIPLICATION:
+                result = String.valueOf(bi1.multiply(bi2));
+                break;
+            case DIVISION:
+                result = String.valueOf(bi1.divide(bi2, RoundingMode.CEILING));
+                break;
+            default:
+                result = String.valueOf(firstNumber);
+        }
+        return result;
     }
 
     public String removeCommasFromNumber(String number) {
@@ -118,8 +154,6 @@ public class CalculatorHelper {
                     return resultNumber;
                 else
                     return new DecimalFormat("#.########E0").format(Double.parseDouble(resultNumber));
-
-                //TODO make this dynamic
             } else if (getIntegerDigits(resultNumber) <= 9 && getIntegerDigits(resultNumber) >= 2) {
                 // The follow procedure correctly formats result's fraction digits.
                 // The larger the number, the less fraction digits we want to show.
@@ -162,7 +196,6 @@ public class CalculatorHelper {
         }
     }
 
-
     public String formatNumber(String number) {
 
         String formattedNumber;
@@ -170,7 +203,6 @@ public class CalculatorHelper {
         Locale.setDefault(Locale.US);
 
         if (number != null) {
-
             if (number.endsWith("-")) //
                 return null;
             if (number.length() > LENGTH_LIMIT_FOR_DECIMALS || isExponent(number)) {
@@ -198,8 +230,29 @@ public class CalculatorHelper {
         }
     }
 
+    public String formatCurrencyNumber(String number, boolean isExponentAllowed) {
+        Locale.setDefault(Locale.US);
+        number = removeCommasFromNumber(number);
+
+        if (getIntegerDigits(number) > 10 && isExponentAllowed)
+            return new DecimalFormat("#.######E0").format(Double.parseDouble(number));
+        else {
+            if (isDecimal(number) && getFractionDigits(number) == 0) {
+                // Method only enters here if number is like 1. -> Doesn't have any decimal part
+                return new DecimalFormat("###,###.####").format(Double.parseDouble(number)).concat(".");
+            } else {
+                DecimalFormat formatter = new DecimalFormat("###,###.#");
+                formatter.setMinimumFractionDigits(getFractionDigits(number));
+//                int count = getCountOfDecimalZeroes(number);
+                formatter.setMaximumFractionDigits(4);
+                number = formatter.format(new BigDecimal(number));
+                return number;
+            }
+        }
+    }
 
     public int getIntegerDigits(String number) {
+        number = removeCommasFromNumber(number);
         String[] arrayOfNumbers = number.split("\\.");
 
         if (arrayOfNumbers.length > 1) {
@@ -208,7 +261,6 @@ public class CalculatorHelper {
             return number.length();
         }
     }
-
 
     public int getFractionDigits(String number) {
         // Find Number of Faction Digits of a number.
@@ -222,6 +274,13 @@ public class CalculatorHelper {
         } else {
             return 0;
         }
+    }
+
+    public String addCommaToNumber(String currentNumber) {
+        if (isDecimal(currentNumber))
+            return currentNumber;
+        else
+            return currentNumber + ".";
     }
 
     public String addDigitIfNumberNonNull(String currentNumber, String addedDigit) {
@@ -242,7 +301,6 @@ public class CalculatorHelper {
                 return currentNumber + addedDigit;
         }
     }
-
 
     public int getLengthOfNumberWithoutCommas(String number) {
         number = removeCommasFromNumber(number);
@@ -288,5 +346,26 @@ public class CalculatorHelper {
         return number.equals(DIVISION_BY_ZERO);
     }
 
+    public String removeLastElementFromStringForCurrencies(String str) {
+        if (str.equals("0") || str.length() == 1)
+            return "0";
+        else if (str.length() > 1)
+            return str.substring(0, str.length() - 1);
+        else
+            return "0";
+    }
+//
+    public int getCountOfDecimalZeroes(String number) {
+        String[] arrayOfNumbers = number.split("\\.");
+
+        if (arrayOfNumbers.length > 1) { // We only get the first four digits this time
+            if (arrayOfNumbers[1].length() <= 4)
+                return (int) arrayOfNumbers[1].substring(0, arrayOfNumbers[1].length() - 1).chars().filter(ch -> ch == '0').count();
+            else
+                return (int) arrayOfNumbers[1].substring(0, 4).chars().filter(ch -> ch == '0').count();
+        } else {
+            return 0;
+        }
+    }
 
 }

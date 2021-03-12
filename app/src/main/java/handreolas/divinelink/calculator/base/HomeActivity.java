@@ -103,8 +103,8 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     }
     private void setupViewPager(ViewPager viewPager) {
         ScreenSlidePagerAdapter adapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new CurrencyFragment(), "Currency");
-        adapter.addFragment(new CalculatorFragment(), "Calculator");
+        adapter.addFragment(new CurrencyFragment(), "Calculator");
+        adapter.addFragment(new CalculatorFragment(), "Currency");
         viewPager.setAdapter(adapter);
     }
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -116,7 +116,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 1)
+            if (position == 0)
                 return new CalculatorFragment();
             else
                 return new CurrencyFragment();

@@ -14,16 +14,16 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import handreolas.divinelink.calculator.R;
-import handreolas.divinelink.calculator.currency.SymbolsDomain;
+import handreolas.divinelink.calculator.currency.CurrencyDomain;
 
 public class CurrencySelectorRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    final private ArrayList<SymbolsDomain> currencySymbols;
+    final private ArrayList<CurrencyDomain> currencySymbols;
     final OnCurrencySelectorClickListener listener;
     final private Context context;
 
 
-    public CurrencySelectorRvAdapter(ArrayList<SymbolsDomain> currencySymbols, OnCurrencySelectorClickListener listener, Context context) {
+    public CurrencySelectorRvAdapter(ArrayList<CurrencyDomain> currencySymbols, OnCurrencySelectorClickListener listener, Context context) {
         this.currencySymbols = currencySymbols;
         this.listener = listener;
         this.context = context;
