@@ -8,17 +8,27 @@ import handreolas.divinelink.calculator.calculator.ICalculatorInteractor;
 
 public interface ICurrencyInteractor {
 
-    void setNumber(OnGetCurrencyResultFinishListener listener, Context ctx, String number);
+    void setNumber(OnGetCurrencyResultListener listener, Context ctx, String number);
 
-    void onTextViewClick(OnGetCurrencyResultFinishListener listener, Context ctx, int position);
+    void onTextViewClick(OnGetCurrencyResultListener listener, Context ctx, int position);
 
-    void getSymbols(OnGetCurrencyResultFinishListener listener, Context ctx);
+    void calculateRates(OnGetCurrencyResultListener listener, Context ctx, int position);
 
-    interface OnGetCurrencyResultFinishListener {
+    void getSymbols(OnGetCurrencyResultListener listener, Context ctx);
+
+    void getRates(OnGetCurrencyResultListener listener, Context ctx);
+
+    interface OnGetCurrencyResultListener {
 
         void onShowResult(String currencyOne, String currencyTwo, String currencyThree);
 
         void onShowSymbols(ArrayList<SymbolsDomain> symbols, int position);
+
+        void onUpdateTime(Long date);
+
+        void onUpdateCurrencyRates(ArrayList<Double> rates, int selectedPosition);
+
+        void onBeforeUpdateTime(String updating);
 
         void onShowSymbols(ArrayList<SymbolsDomain> symbols);
 

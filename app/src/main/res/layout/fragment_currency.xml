@@ -128,10 +128,11 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/exchange_rates_TV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Exchange rates are provided by Fixer.io\nConnect to the network to get the latest info."
+            android:text="@string/exchange_rates_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

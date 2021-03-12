@@ -15,7 +15,7 @@ import handreolas.divinelink.calculator.currency.CurrencySymbolsModel;
 import handreolas.divinelink.calculator.currency.SymbolsDomain;
 import handreolas.divinelink.calculator.features.Converters;
 
-@Database(entities = {CalculatorDomain.class, CurrencyRateModel.class, SymbolsDomain.class}, version = 8, exportSchema = false)
+@Database(entities = {CalculatorDomain.class,  SymbolsDomain.class}, version = 9, exportSchema = false)
 @TypeConverters(Converters.class)
 abstract public class HomeDatabase extends RoomDatabase {
 

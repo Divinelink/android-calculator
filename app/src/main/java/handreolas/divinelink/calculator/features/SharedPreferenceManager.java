@@ -16,6 +16,8 @@ public class SharedPreferenceManager {
     private static final String SECOND_NAME = "SecondCurrencyName";
     private static final String THIRD_NAME = "ThirdCurrencyName";
 
+    private static final String SELECTED_POSITION = "SelectedPosition";
+
 
     public String getSavedCurrencySymbol(int position, Context ctx) {
         String KEY = null;
@@ -39,8 +41,6 @@ public class SharedPreferenceManager {
         return prefs.getString(KEY, DEFAULT_VALUE);
     }
 
-
-
     public String getSavedCurrencyName(int position, Context ctx) {
         String KEY = null;
         String DEFAULT_VALUE = null;
@@ -61,6 +61,18 @@ public class SharedPreferenceManager {
         }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getString(KEY, DEFAULT_VALUE);
+    }
+
+    public int getSelectedPosition(Context ctx) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return prefs.getInt(SELECTED_POSITION, 0);
+    }
+
+    public void saveSelectedPosition(int position, Context ctx) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(SELECTED_POSITION, position);
+        editor.apply();
     }
 
     public void saveCurrencySymbol(String symbol, int position, Context ctx) {

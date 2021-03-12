@@ -2,6 +2,7 @@ package handreolas.divinelink.calculator.currency;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Symbols")
@@ -11,12 +12,35 @@ public class SymbolsDomain {
     @NonNull
     private final String symbol;
 
-    private final String description;
+    private String description;
+
+    private Double rate;
 
 
-    public SymbolsDomain(String symbol, String description) {
+    public SymbolsDomain(@NonNull String symbol, String description, Double rate) {
         this.symbol = symbol;
         this.description = description;
+        this.rate = rate;
+    }
+
+    @Ignore
+    public SymbolsDomain(@NonNull String symbol, String description) {
+        this.symbol = symbol;
+        this.description = description;
+    }
+
+    @Ignore
+    public SymbolsDomain(@NonNull String symbol, Double rate) {
+        this.symbol = symbol;
+        this.rate = rate;
+    }
+
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
     }
 
     public String getSymbol() {

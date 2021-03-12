@@ -1,6 +1,10 @@
 package handreolas.divinelink.calculator.currency;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import handreolas.divinelink.calculator.R;
@@ -26,9 +31,8 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
     private Button mOne, mTwo, mThree, mFour, mFive, mSix, mSeven, mEight, mNine, mZero, mComma;
     private Button mBackspace, mDelete;
 
-    private CardView mCurrencySelectorView;
 
-    private TextView listFirstTV, listSecondTV, listThirdTV, valueFirstTV, valueSecondTV, valueThirdTV, infoFirstTV, infoSecondTV, infoThirdTV;
+    private TextView listFirstTV, listSecondTV, listThirdTV, valueFirstTV, valueSecondTV, valueThirdTV, infoFirstTV, infoSecondTV, infoThirdTV, exchangeRatesTV;
 
     private SharedPreferenceManager sharedPreferenceManager;
 
@@ -82,8 +86,8 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
         infoSecondTV = v.findViewById(R.id.currencyInfoTVSecond);
         infoThirdTV = v.findViewById(R.id.currencyInfoTVThird);
 
-//        mCurrencySelectorView = v.findViewById(R.id.currencySelectorRoot);
-//        mCurrencySelectorView.setVisibility(View.GONE);
+        exchangeRatesTV = v.findViewById(R.id.exchange_rates_TV);
+
 
         listFirstTV.setText(sharedPreferenceManager.getSavedCurrencySymbol(0, getContext()));
         listSecondTV.setText(sharedPreferenceManager.getSavedCurrencySymbol(1, getContext()));
@@ -114,6 +118,9 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
         listSecondTV.setOnClickListener(this::onClick);
         listThirdTV.setOnClickListener(this::onClick);
 
+        valueFirstTV.setOnClickListener(this::onClick);
+        valueSecondTV.setOnClickListener(this::onClick);
+        valueThirdTV.setOnClickListener(this::onClick);
 
         mZero.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,15 +137,7 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
         return v;
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
     public void onClick(View v) {
-        // TODO Is this efficient?
 
         if (v.getId() == R.id.currencyListButtonFirst) {
 //            presenter.getCurrencyList(0, getContext());
@@ -149,6 +148,25 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
         } else if (v.getId() == R.id.currencyListButtonThird) {
 //            presenter.getCurrencyList(2, getContext());
             addCurrencySelectorFragment(2);
+        } else if (v.getId() == R.id.currencyValueTVFirst) {
+            sharedPreferenceManager.saveSelectedPosition(0, getContext());
+            valueFirstTV.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryVariant));
+            valueSecondTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            valueThirdTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            presenter.calculateRates(0, 1, getContext());
+
+        } else if (v.getId() == R.id.currencyValueTVSecond) {
+            sharedPreferenceManager.saveSelectedPosition(1, getContext());
+            valueFirstTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            valueSecondTV.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryVariant));
+            valueThirdTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            presenter.calculateRates(1, 1, getContext());
+        } else if (v.getId() == R.id.currencyValueTVThird) {
+            sharedPreferenceManager.saveSelectedPosition(2, getContext());
+            valueFirstTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            valueSecondTV.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            valueThirdTV.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryVariant));
+            presenter.calculateRates(2, 1, getContext());
         }
 
 //        if (v.getId() == R.id.buttonOne) {
@@ -196,10 +214,6 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
     @Override
     public void showSymbols(String a, String b, String c) {
 
-//        infoFirstTV.setText(a);
-//        infoSecondTV.setText(b);
-//        infoThirdTV.setText(c);
-
     }
 
     @Override
@@ -207,24 +221,15 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
 
 
         if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
-//                CurrencyRvAdapter currencyRvAdapter = new CurrencyRvAdapter(currencySymbols, getContext());
+            getActivity().runOnUiThread(() -> {
 
-                @Override
-                public void run() {
-
-
-                }
             });
         }
 
     }
 
 
-
     public void addCurrencySelectorFragment(int position) {
-
-//        mCurrencySelectorView.setVisibility(View.VISIBLE);
 
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -232,5 +237,32 @@ public class CurrencyFragment extends Fragment implements ICurrencyView {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack(null)
                 .commit();
+    }
+
+
+    @Override
+    public void updateTime(String date) {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> exchangeRatesTV.setText(String.format("%s\n(%s)", getResources().getString(R.string.exchange_rates_text_short), date), TextView.BufferType.SPANNABLE));
+        }
+    }
+
+    @Override
+    public void updateTimeBeforeCall(String updating) {
+
+        String text = getResources().getString(R.string.exchange_rates_text_short) + "\n" + updating;
+        Spannable spannable = new SpannableString(text);
+
+        spannable.setSpan(new ForegroundColorSpan(Color.RED),
+                getResources().getString(R.string.exchange_rates_text_short).length(),
+                text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        exchangeRatesTV.setText(spannable, TextView.BufferType.SPANNABLE);
+    }
+
+    @Override
+    public void updateCurrencyRates(Double r1, Double r2, Double r3) {
+        valueFirstTV.setText(r1.toString());
+        valueSecondTV.setText(r2.toString());
+        valueThirdTV.setText(r3.toString());
     }
 }

@@ -15,10 +15,13 @@
     <string name="decimalSeparator">.</string>
     <string name="calculator">Calculator</string>
     <string name="currency">Currency</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="select_currency">Select Currency</string>
     <string name="cancel">Cancel</string>
+
+    <string name="exchange_rates_text">Exchange rates are provided by Fixer.io\nConnect to the network to get the latest info.</string>
+    <string name="exchange_rates_text_short">Exchange rates are provided by Fixer.io</string>
+    <string name="updating_values">Updating Rates…</string>
 
 
 </resources>

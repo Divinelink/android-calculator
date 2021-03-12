@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -18,29 +17,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import handreolas.divinelink.calculator.R;
 import handreolas.divinelink.calculator.currency.CurrencyFragment;
-import handreolas.divinelink.calculator.currency.CurrencyPresenterImpl;
-import handreolas.divinelink.calculator.currency.ICurrencyPresenter;
-import handreolas.divinelink.calculator.currency.ICurrencyView;
 import handreolas.divinelink.calculator.currency.SymbolsDomain;
 import handreolas.divinelink.calculator.features.SharedPreferenceManager;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CurrencySelectorFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class CurrencySelectorFragment extends Fragment implements ICurrencyView {
 
-    private ICurrencyPresenter presenter;
+public class CurrencySelectorFragment extends Fragment implements ICurrencySelectorView {
+
+    private ICurrencySelectorPresenter presenter;
     private RecyclerView mRecyclerView;
     private MaterialButton mCancelButton;
     private SharedPreferenceManager preferenceManager;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String POSITION = "position";
 
-    // TODO: Rename and change types of parameters
     private int mPositionOfClickedItem;
 
     public CurrencySelectorFragment() {
@@ -90,7 +80,7 @@ public class CurrencySelectorFragment extends Fragment implements ICurrencyView 
         preferenceManager = new SharedPreferenceManager();
 
 
-        presenter = new CurrencyPresenterImpl(this);
+        presenter = new CurrencySelectorPresenterImpl(this);
         presenter.getCurrencyList(mPositionOfClickedItem, getActivity());
 
         return v;
@@ -98,12 +88,7 @@ public class CurrencySelectorFragment extends Fragment implements ICurrencyView 
 
 
     @Override
-    public void showSymbols(String a, String b, String c) {
-
-    }
-
-    @Override
-    public void showCurrencyList(ArrayList<SymbolsDomain> currencySymbols, int position) {
+    public void showCurrencyListOnSelector(ArrayList<SymbolsDomain> currencySymbols, int position) {
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 final CurrencySelectorRvAdapter currencySelectorRvAdapter = new CurrencySelectorRvAdapter(currencySymbols, new OnCurrencySelectorClickListener() {
@@ -130,6 +115,5 @@ public class CurrencySelectorFragment extends Fragment implements ICurrencyView 
                 }
             });
         }
-
     }
 }

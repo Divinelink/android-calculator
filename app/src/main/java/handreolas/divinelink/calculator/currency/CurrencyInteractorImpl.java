@@ -3,20 +3,14 @@ package handreolas.divinelink.calculator.currency;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
+import handreolas.divinelink.calculator.R;
 import handreolas.divinelink.calculator.base.HomeDatabase;
+import handreolas.divinelink.calculator.features.SharedPreferenceManager;
 import handreolas.divinelink.calculator.rest.RestClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,10 +18,11 @@ import retrofit2.Response;
 
 public class CurrencyInteractorImpl implements ICurrencyInteractor {
 
-//    private final static String API_KEY = "390279d0a198a604020f9761a80e918f";
+    final SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager();
+
 
     @Override
-    public void getSymbols(OnGetCurrencyResultFinishListener listener, Context ctx) {
+    public void getSymbols(OnGetCurrencyResultListener listener, Context ctx) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -53,6 +48,7 @@ public class CurrencyInteractorImpl implements ICurrencyInteractor {
                                     }
                                     arrayListCurrencies.addAll(currencyDao.getCurrencySymbols());
                                     listener.onShowSymbols(arrayListCurrencies);
+
                                 }
                             });
                         }
@@ -70,12 +66,54 @@ public class CurrencyInteractorImpl implements ICurrencyInteractor {
     }
 
     @Override
-    public void setNumber(OnGetCurrencyResultFinishListener listener, Context ctx, String number) {
+    public void getRates(OnGetCurrencyResultListener listener, Context ctx) {
+        listener.onBeforeUpdateTime(ctx.getResources().getString(R.string.updating_values));
+        AsyncTask.execute(() -> {
+            final CurrencyDao currencyDao = HomeDatabase.getDatabase(ctx).currencyDao();
+            final String firstCur = sharedPreferenceManager.getSavedCurrencySymbol(0, ctx);
+            final String secondCur = sharedPreferenceManager.getSavedCurrencySymbol(1, ctx);
+            final String thirdCur = sharedPreferenceManager.getSavedCurrencySymbol(2, ctx);
+            final int selectedPosition = sharedPreferenceManager.getSelectedPosition(ctx);
+
+
+            Call<CurrencyRateModel> call = RestClient.call().fetchLatestRates();
+            call.enqueue(new Callback<CurrencyRateModel>() {
+                @Override
+                public void onResponse(Call<CurrencyRateModel> call, Response<CurrencyRateModel> response) {
+                    Log.d("Response For Rates", "Successfully got response.");
+                    AsyncTask.execute(() -> {
+                        for (Map.Entry<String, Double> entry : response.body().getRates().entrySet()) {
+                            currencyDao.updateRate(entry.getKey(), entry.getValue());
+                        }
+                        listener.onUpdateTime(response.body().getTimestamp());
+
+                        ArrayList<Double> arrayList = new ArrayList<>();
+                        arrayList.add(currencyDao.getRateForCurrency(firstCur));
+                        arrayList.add(currencyDao.getRateForCurrency(secondCur));
+                        arrayList.add(currencyDao.getRateForCurrency(thirdCur));
+
+                        listener.onUpdateCurrencyRates(arrayList, selectedPosition);
+
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<CurrencyRateModel> call, Throwable t) {
+                    Log.d("Response For Rates", "Failed to get response.");
+                }
+            });
+        });
+
+    }
+
+
+    @Override
+    public void setNumber(OnGetCurrencyResultListener listener, Context ctx, String number) {
 
     }
 
     @Override
-    public void onTextViewClick(OnGetCurrencyResultFinishListener listener, Context ctx, int position) {
+    public void onTextViewClick(OnGetCurrencyResultListener listener, Context ctx, int position) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -97,7 +135,7 @@ public class CurrencyInteractorImpl implements ICurrencyInteractor {
 
                                     Log.d("Response For Symbols", "Successfully got response.");
                                     for (Map.Entry<String, String> entry : response.body().getSymbols().entrySet()) {
-                                        currencyDao.insertCurrencySymbols(new SymbolsDomain(entry.getKey(), entry.getValue()));
+                                        currencyDao.insertCurrencySymbols(new SymbolsDomain(entry.getKey(), entry.getValue(), null));
                                     }
                                     arrayListCurrencies.addAll(currencyDao.getCurrencySymbols());
                                     listener.onShowSymbols(arrayListCurrencies, position);
@@ -114,6 +152,31 @@ public class CurrencyInteractorImpl implements ICurrencyInteractor {
                     listener.onShowSymbols(arrayListCurrencies, position);
                 }
             }
+        });
+    }
+
+    @Override
+    public void calculateRates(OnGetCurrencyResultListener listener, Context ctx, int position) {
+        AsyncTask.execute(() -> {
+
+            final CurrencyDao currencyDao = HomeDatabase.getDatabase(ctx).currencyDao();
+            final String firstCur = sharedPreferenceManager.getSavedCurrencySymbol(0, ctx);
+            final String secondCur = sharedPreferenceManager.getSavedCurrencySymbol(1, ctx);
+            final String thirdCur = sharedPreferenceManager.getSavedCurrencySymbol(2, ctx);
+            final String selectedCur = sharedPreferenceManager.getSavedCurrencySymbol(position, ctx);
+            ArrayList<Double> rates = new ArrayList<>();
+
+            Double firstRate = currencyDao.getRateForCurrency(firstCur) / currencyDao.getRateForCurrency(selectedCur);
+            Double secondRate = currencyDao.getRateForCurrency(secondCur) / currencyDao.getRateForCurrency(selectedCur);
+            Double thirdRate = currencyDao.getRateForCurrency(thirdCur) / currencyDao.getRateForCurrency(selectedCur);
+
+            rates.add(firstRate);
+            rates.add(secondRate);
+            rates.add(thirdRate);
+
+            listener.onUpdateCurrencyRates(rates, position);
+
+
         });
     }
 }

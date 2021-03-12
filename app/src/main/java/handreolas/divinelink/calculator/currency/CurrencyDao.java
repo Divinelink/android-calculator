@@ -7,6 +7,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 @Dao
 public abstract class CurrencyDao {
@@ -15,6 +16,13 @@ public abstract class CurrencyDao {
     abstract void insertCurrencySymbols(SymbolsDomain symbolsDomain);
 
     @Query("SELECT * FROM Symbols")
-    abstract List<SymbolsDomain> getCurrencySymbols();
+    public abstract List<SymbolsDomain> getCurrencySymbols();
+
+    @Query("SELECT rate FROM Symbols WHERE symbol == :symbol")
+    public abstract Double getRateForCurrency(String symbol);
+
+    @Query("UPDATE Symbols SET rate = :rate WHERE symbol == :symbol")
+    public abstract void updateRate(String symbol, Double rate);
+
 
 }

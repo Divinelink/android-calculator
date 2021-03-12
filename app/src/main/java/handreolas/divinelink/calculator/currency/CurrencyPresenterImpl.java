@@ -2,23 +2,26 @@ package handreolas.divinelink.calculator.currency;
 
 import android.content.Context;
 
-import com.google.gson.internal.$Gson$Preconditions;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class CurrencyPresenterImpl implements ICurrencyPresenter, ICurrencyInteractor.OnGetCurrencyResultFinishListener {
+public class CurrencyPresenterImpl implements ICurrencyPresenter, ICurrencyInteractor.OnGetCurrencyResultListener {
 
-    private final ICurrencyView currencyView;
     private final ICurrencyInteractor interactor;
+    private final ICurrencyView currencyView;
 
     public CurrencyPresenterImpl(ICurrencyView currencyView) {
         this.currencyView = currencyView;
         interactor = new CurrencyInteractorImpl();
     }
 
+
+
     @Override
     public void getCurrencyRatios(Context ctx) {
         interactor.getSymbols(this, ctx);
+        interactor.getRates(this, ctx);
     }
 
     @Override
@@ -42,8 +45,21 @@ public class CurrencyPresenterImpl implements ICurrencyPresenter, ICurrencyInter
     }
 
     @Override
+    public void onUpdateTime(Long timestamp) {
+
+        String currentDate = String.format("%s", new SimpleDateFormat("dd MMMM yyyy HH:mm").format(new Date(timestamp*1000)));
+        currencyView.updateTime(currentDate);
+
+    }
+
+    @Override
+    public void onBeforeUpdateTime(String updating) {
+        currencyView.updateTimeBeforeCall(updating);
+    }
+
+    @Override
     public void getCurrencyList(int position, Context ctx) {
-        interactor.onTextViewClick(this, ctx, position);
+
     }
 
     @Override
@@ -51,19 +67,22 @@ public class CurrencyPresenterImpl implements ICurrencyPresenter, ICurrencyInter
         currencyView.showCurrencyList(symbols, position);
     }
 
+
     @Override
     public void onShowSymbols(ArrayList<SymbolsDomain> symbols) {
 
-//        symbols.get(0).getSymbols().get(0);
-//        symbols.get(0).getSymbols().values();
-//
-//
-//        symbols.get(1).getSymbols().get(0);
-//        symbols.get(1).getSymbols().values();
-//
-//        symbols.get(2).getSymbols().get(0);
-//        symbols.get(2).getSymbols().values();
-//
-//        currencyView.showSymbols(  symbols.get(0).getSymbols().get(0),   symbols.get(1).getSymbols().get(0),   symbols.get(1).getSymbols().get(0));
+    }
+    @Override
+    public void onUpdateCurrencyRates(ArrayList<Double> rates, int selectedPosition)  {
+        currencyView.updateCurrencyRates(
+                rates.get(0) / rates.get(selectedPosition),
+                rates.get(1) / rates.get(selectedPosition),
+                rates.get(2) / rates.get(selectedPosition));
+    }
+
+
+    @Override
+    public void calculateRates(int position, long value, Context ctx) {
+        interactor.calculateRates(this, ctx, position);
     }
 }
